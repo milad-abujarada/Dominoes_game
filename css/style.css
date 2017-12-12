@@ -1,6 +1,6 @@
 /*making sure the html has enough height to contain everything else and based the percentage on that*/
 html {
-	height: 610px;
+	height: 600px;
     border: 2px solid black;
 }
 
@@ -17,7 +17,91 @@ body {
 
 section {
 	display:inline-block;
-	height: 20%;
-	width: 75%;
-	border:2px solid black;
+	height: 30%;
+	width: 80%;
+/*	border:2px solid black;*/
+	text-align: center;
+}
+
+.tileVertical,
+.tileHorizontal
+{
+	border-radius: 5px;
+}
+
+.tileVertical {
+	height: 80px;
+	width: 50px;
+	border: 2px solid black;
+	display: inline-block;	
+
+}
+
+.tileHorizontal {
+	height: 35px;
+	width: 100px;
+	border: 2px solid black;
+	display: inline-block;
+}
+
+.tileSquareVerticalTop {
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+
+.tileSquareVerticalBottom {
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.tileSquareVerticalTop,
+.tileSquareVerticalBottom {
+	height: 45%;
+	border:2px solid red;
+}
+
+.tileSquareHorizontalLeft,
+.tileSquareHorizontalRight {
+	display: block;
+	height: 90%;
+	width: 46%;
+	border:2px solid red;
+	float: right;
+	
+}
+
+.tileSquareHorizontalRight {
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.tileSquareHorizontalLeft {
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.faceDown {
+	background-color: black;
+}
+.computerArea{
+	position: relative;
+	left: 1%;
+}
+
+.playArea {
+	position: relative;
+	height: 40%;
+}
+
+.boneyardArea{
+	position: relative;
+	height: 55%;
+	width: 20%;
+	left: 80%;
+	bottom: 50%;
+}
+
+.playerArea {
+	position: relative;
+	bottom: 55%;
 }
