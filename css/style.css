@@ -1,0 +1,23 @@
+/*making sure the html has enough height to contain everything else and based the percentage on that*/
+html {
+	height: 610px;
+    border: 2px solid black;
+}
+
+/*making sure the body has the same height as the html document*/
+body {
+	height: 100%;
+}
+
+/*making sure the container for the entire game has the same height as the body*/
+.container{
+	height: 100%;
+
+}
+
+section {
+	display:inline-block;
+	height: 20%;
+	width: 75%;
+	border:2px solid black;
+}
