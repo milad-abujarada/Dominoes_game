@@ -10,6 +10,8 @@ $(document).ready(function(){
 	playerTiles = assignTiles(allTiles, 0, 6);
 	computerTiles = assignTiles(allTiles, 7, 13);
 	boneyard = assignTiles(allTiles, 14, 27);
+	drawComputerInitialTiles(computerTiles);
+	//drawTile(computerTiles[0]);
 	console.log(allTiles);
 	console.log(playerTiles);
 	console.log(computerTiles);
@@ -50,11 +52,23 @@ $(document).ready(function(){
 	};
 
 	//function to assign values to bonyardTiles, playerTiles, and computerTiles arrays
-	function assignTiles (allTiles, index, endOfArray){
+	function assignTiles(allTiles, index, endOfArray){
 		let subTiles = [];
 		for (var i = index; i <= endOfArray; i++) {
 			subTiles.push(allTiles[i]);
-		}
+		};
 		return subTiles;
-	}
+	};
+
+	//function to draw a tile for the computer 
+	function drawTile(aTile){
+		$("<div></div>").addClass(String(aTile.value1) + String(aTile.value2) + " tileVertical faceDown").appendTo("#computerBoard");	
+	};
+
+	//function draw the initial 7 tiles for the computer
+	function drawComputerInitialTiles(computerTiles){
+		for (let i = 0; i < computerTiles.length - 1; i++) {
+			drawTile(computerTiles[i]);
+		};
+	};
 });
