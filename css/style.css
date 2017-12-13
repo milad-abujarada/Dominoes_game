@@ -3,7 +3,7 @@
 /*making sure the html has enough height to contain everything else and based the percentage on that*/
 html {
 	height: 600px;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
 }
 
 /*making sure the body has the same height as the html document*/
@@ -21,7 +21,7 @@ section {
 	display:inline-block;
 	height: 20%;
 	width: 90%;
-	border:2px solid black;
+	/*border:2px solid black;*/
 	text-align: center;
 }
 
@@ -120,7 +120,7 @@ section {
     height: 15%;
     position: relative;
     left: 5%;
-    border:1px solid green;
+   /* border:1px solid green;*/
 }
 
 .playAreaCenter{
@@ -128,7 +128,7 @@ section {
     height: 55%;
     position: relative;
     left: 5%;
-    border:1px solid brown;
+    /*border:1px solid brown;*/
 }
 
 .playAreaRightColumn,
@@ -136,7 +136,7 @@ section {
 	width: 10%;
 	height: 100%;
 	display: inline-block;
-	border:1px solid aqua;
+	/*border:1px solid aqua;*/
 }
 
 .playerScore,
@@ -144,7 +144,7 @@ section {
 	width: 39%;
 	height: 100%;
 	display: inline-block;
-	border:1px solid grey;
+	/*border:1px solid grey;*/
 }
 
 .playAreaDiv {
