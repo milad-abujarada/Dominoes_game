@@ -4,7 +4,7 @@ $(document).ready(function(){
 	//the second is to hold the boneyard tiles
 	//the third is to hold the player tiles
 	//the fourth to hold the computer tiles
-	let allTiles, bonyardTiles, playerTiles, computerTiles = [];
+	let allTiles, boneyardTiles, playerTiles, computerTiles = [];
 
 	//creating the 28 tiles of the game
 	allTiles = createAllTiles();
@@ -19,13 +19,16 @@ $(document).ready(function(){
 	computerTiles = assignTiles(allTiles, 7, 13);
 
 	//assigning the boneyard the 14 remaining tiles
-	boneyard = assignTiles(allTiles, 14, 27);
+	boneyardTiles = assignTiles(allTiles, 14, 27);
 
 	//showing the computer's tiles on the page
 	drawComputerInitialTiles(computerTiles);
 
 	//showing the player's tiles on the page
 	drawPlayerInitialTiles(playerTiles);
+
+	//showing the boneyard tiles on the page
+	drawBoneyardInitialTiles(boneyardTiles);
 
 	//creating object tile
 	function Tile(value1, value2){
@@ -61,7 +64,7 @@ $(document).ready(function(){
 		};
 	};
 
-	//function to assign values to bonyardTiles, playerTiles, and computerTiles arrays
+	//function to assign values to boneyardTiles, playerTiles, and computerTiles arrays
 	function assignTiles(allTiles, index, endOfArray){
 		let subTiles = [];
 		for (var i = index; i <= endOfArray; i++) {
@@ -75,7 +78,7 @@ $(document).ready(function(){
 		$("<div></div>").addClass(String(aTile.value1) + String(aTile.value2) + " tileVertical faceDown").appendTo("#computerBoard");	
 	};
 
-	//function draw the initial 7 tiles for the computer
+	//function draws the initial 7 tiles for the computer
 	function drawComputerInitialTiles(computerTiles){
 		for (let i = 0; i < computerTiles.length - 1; i++) {
 			drawComputerTile(computerTiles[i]);
@@ -93,10 +96,22 @@ $(document).ready(function(){
 		verticalTile.appendTo("#playerBoard");
 	};
 
-	//function draw the initial 7 tiles for the player
+	//function draws the initial 7 tiles for the player
 	function drawPlayerInitialTiles(playerTiles){
 		for (let i = 0; i < playerTiles.length - 1; i++) {
 			drawPlayerTile(playerTiles[i]);
+		}
+	};
+
+	//function to draw a tile for the boneyard
+	function drawBoneyardTile(aTile){
+		$("<div></div>").addClass(String(aTile.value1) + String(aTile.value2) + " tileHorizontal faceDownBlock").appendTo("#boneyardTiles");	
+	};
+
+	//function draws the initial 14 tiles of the boneyard
+	function drawBoneyardInitialTiles(boneyardTiles){
+		for(let i = 0; i < boneyardTiles.length - 1; i++) {
+			drawBoneyardTile(boneyardTiles[i]);
 		}
 	};
 });
