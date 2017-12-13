@@ -5,17 +5,27 @@ $(document).ready(function(){
 	//the third is to hold the player tiles
 	//the fourth to hold the computer tiles
 	let allTiles, bonyardTiles, playerTiles, computerTiles = [];
+
+	//creating the 28 tiles of the game
 	allTiles = createAllTiles();
+
+	//shuffling the tiles after creating them
 	shufflingTiles(allTiles);
+
+	//assigning the player his/her tiles
 	playerTiles = assignTiles(allTiles, 0, 6);
+
+	//assigning the computer its tiles
 	computerTiles = assignTiles(allTiles, 7, 13);
+
+	//assigning the boneyard the 14 remaining tiles
 	boneyard = assignTiles(allTiles, 14, 27);
+
+	//showing the computer's tiles on the page
 	drawComputerInitialTiles(computerTiles);
-	//drawTile(computerTiles[0]);
-	console.log(allTiles);
-	console.log(playerTiles);
-	console.log(computerTiles);
-	console.log(boneyard);
+
+	//showing the player's tiles on the page
+	drawPlayerInitialTiles(playerTiles);
 
 	//creating object tile
 	function Tile(value1, value2){
@@ -61,14 +71,32 @@ $(document).ready(function(){
 	};
 
 	//function to draw a tile for the computer 
-	function drawTile(aTile){
+	function drawComputerTile(aTile){
 		$("<div></div>").addClass(String(aTile.value1) + String(aTile.value2) + " tileVertical faceDown").appendTo("#computerBoard");	
 	};
 
 	//function draw the initial 7 tiles for the computer
 	function drawComputerInitialTiles(computerTiles){
 		for (let i = 0; i < computerTiles.length - 1; i++) {
-			drawTile(computerTiles[i]);
+			drawComputerTile(computerTiles[i]);
 		};
+	};
+
+	//function to draw a tile for the player
+	function drawPlayerTile(aTile){
+		let numberToString = ["zero", "one", "two", "three", "four", "five","six"];
+		let upperPart = $("<div></div>").addClass("tileSquareVerticalTop").css("backgroundImage", "url(images/" + numberToString[aTile.value1]+".png");
+		let bottomPart = $("<div></div>").addClass("tileSquareVerticalBottom").css("backgroundImage", "url(images/" + numberToString[aTile.value2]+".png");
+		let verticalTile = $("<div></div>").addClass(String(aTile.value1) + String(aTile.value2) + " tileVertical");
+		upperPart.appendTo(verticalTile);
+		bottomPart.appendTo(verticalTile);
+		verticalTile.appendTo("#playerBoard");
+	};
+
+	//function draw the initial 7 tiles for the player
+	function drawPlayerInitialTiles(playerTiles){
+		for (let i = 0; i < playerTiles.length - 1; i++) {
+			drawPlayerTile(playerTiles[i]);
+		}
 	};
 });
