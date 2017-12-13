@@ -6,9 +6,14 @@ $(document).ready(function(){
 	//the fourth to hold the computer tiles
 	let allTiles, bonyardTiles, playerTiles, computerTiles = [];
 	allTiles = createAllTiles();
-	console.log(allTiles);
 	shufflingTiles(allTiles);
+	playerTiles = assignTiles(allTiles, 0, 6);
+	computerTiles = assignTiles(allTiles, 7, 13);
+	boneyard = assignTiles(allTiles, 14, 27);
 	console.log(allTiles);
+	console.log(playerTiles);
+	console.log(computerTiles);
+	console.log(boneyard);
 
 	//creating object tile
 	function Tile(value1, value2){
@@ -42,8 +47,14 @@ $(document).ready(function(){
 			allTiles[randomNum1] = allTiles[randomNum2];
 			allTiles[randomNum2] = temp;
 		};
-		//console.log(allTilesForShuffling);
-		//return allTilesForShuffling;
 	};
 
+	//function to assign values to bonyardTiles, playerTiles, and computerTiles arrays
+	function assignTiles (allTiles, index, endOfArray){
+		let subTiles = [];
+		for (var i = index; i <= endOfArray; i++) {
+			subTiles.push(allTiles[i]);
+		}
+		return subTiles;
+	}
 });
