@@ -33,43 +33,83 @@
   	    </div>
       </section>
       <section class="playArea" id="playBoard"> <!-- the play area where the tiles in play gets placed -->
-  	    <div id="playedTiles">	
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-          <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
-  	    </div>
+  	    <div class="playAreaDiv" id="playedTiles">	
+          <div class="playAreaUpperRow">
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+  	      </div>
+          <div class="playAreaCenter">
+            <div class="playAreaLeftColumn">
+              <div class="tileVerticalPlayAreaLeft">
+                <div class="tileSquareVerticalTop"></div><div class="tileSquareVerticalBottom"></div>
+              </div>
+              <div class="tileVerticalPlayAreaLeft">
+                <div class="tileSquareVerticalTop"></div><div class="tileSquareVerticalBottom"></div>
+              </div>
+            </div>
+            <div class="playerScore">
+              
+            </div>
+            <div class="computerScore">
+              
+            </div>
+            <div class="playAreaRightColumn">
+              <div class="tileVerticalPlayAreaRight">
+                <div class="tileSquareVerticalTop"></div><div class="tileSquareVerticalBottom"></div>
+              </div>
+              <div class="tileVerticalPlayAreaRight">
+                <div class="tileSquareVerticalTop"></div><div class="tileSquareVerticalBottom"></div>
+              </div>
+            </div>
+            
+          </div>
+          <div class="playAreaBottomRow">
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+            <div class="tileHorizontal"><div class=tileSquareHorizontalRight></div><div class=tileSquareHorizontalLeft></div></div>
+          </div>
+        </div>
       </section>
       <section class="boneyardArea" id="boneyard"> <!-- tiles not withdrawn yet -->
-  	    <div id="boneyardTiles">
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
-          <div class="tileHorizontal faceDown"></div>
+  	    <div class="boneyarAreaDiv" id="boneyardTiles">
+          <div class="tileHorizontal faceDownBlock "></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
+          <div class="tileHorizontal faceDownBlock"></div>
   	    </div>
       </section>
       <section class="playerArea" id="playerSide"> <!-- tiles not withdrawn yet -->
   	    <div id="playerBoard">	
-          <div class="tileVertical"><div class="tileSquareVerticalTop"></div><div class="tileSquareVerticalBottom"></div></div>
+          
           <div class="tileVertical"><div class="tileSquareVerticalTop"></div><div class="tileSquareVerticalBottom"></div></div>
           <div class="tileVertical"><div class="tileSquareVerticalTop"></div><div class="tileSquareVerticalBottom"></div></div>
           <div class="tileVertical"><div class="tileSquareVerticalTop"></div><div class="tileSquareVerticalBottom"></div></div>

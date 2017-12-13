@@ -1,3 +1,5 @@
+
+
 /*making sure the html has enough height to contain everything else and based the percentage on that*/
 html {
 	height: 600px;
@@ -17,9 +19,9 @@ body {
 
 section {
 	display:inline-block;
-	height: 30%;
-	width: 80%;
-/*	border:2px solid black;*/
+	height: 20%;
+	width: 90%;
+	border:2px solid black;
 	text-align: center;
 }
 
@@ -30,16 +32,16 @@ section {
 }
 
 .tileVertical {
-	height: 80px;
-	width: 50px;
+	height: 95px;
+	width: 45px;
 	border: 2px solid black;
 	display: inline-block;	
-
+	border-radius: 5px;
 }
 
 .tileHorizontal {
 	height: 35px;
-	width: 100px;
+	width: 76px;
 	border: 2px solid black;
 	display: inline-block;
 }
@@ -47,61 +49,138 @@ section {
 .tileSquareVerticalTop {
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
+	background-image: url('../images/one.png');
+	
 }
 
 .tileSquareVerticalBottom {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+	background-image: url('../images/six.png');
 }
 
 .tileSquareVerticalTop,
 .tileSquareVerticalBottom {
-	height: 45%;
+	height: 44%;
 	border:2px solid red;
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 
 .tileSquareHorizontalLeft,
 .tileSquareHorizontalRight {
 	display: block;
 	height: 90%;
-	width: 46%;
+	width: 43%;
 	border:2px solid red;
 	float: right;
-	
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 
 .tileSquareHorizontalRight {
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
+	background-image: url('../images/horizontalSix.png');
 }
 
 .tileSquareHorizontalLeft {
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
+	background-image: url('../images/three.png');
 }
 
-.faceDown {
+.faceDown,
+.faceDownBlock {
 	background-color: black;
 }
+
+.faceDownBlock {
+	display: block;
+	margin-bottom: 3px;
+}
+
 .computerArea{
-	position: relative;
-	left: 1%;
+/*	position: relative;
+	bottom: 1%;*/
 }
 
 .playArea {
+    position: relative;
+    bottom: 55%;
+    height: 50%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: start;
+}
+
+.playAreaUpperRow,
+.playAreaBottomRow {
+    width: 90%;
+    height: 15%;
+    position: relative;
+    left: 5%;
+    border:1px solid green;
+}
+
+.playAreaCenter{
+    width: 90%;
+    height: 55%;
+    position: relative;
+    left: 5%;
+    border:1px solid brown;
+}
+
+.playAreaRightColumn,
+.playAreaLeftColumn {
+	width: 10%;
+	height: 100%;
+	display: inline-block;
+	border:1px solid aqua;
+}
+
+.playerScore,
+.computerScore {
+	width: 39%;
+	height: 100%;
+	display: inline-block;
+	border:1px solid grey;
+}
+
+.playAreaDiv {
+	width: 100%;
+	height: 100%;
+}
+
+.tileVerticalPlayAreaRight,
+.tileVerticalPlayAreaLeft {
+	height: 75px;
+	width: 40px;
+	border: 2px solid black;
+	display: block;
+	border-radius: 5px;
+}
+
+.tileVerticalPlayAreaRight {
 	position: relative;
-	height: 40%;
+	left: 45%;
 }
 
 .boneyardArea{
 	position: relative;
-	height: 55%;
-	width: 20%;
-	left: 80%;
-	bottom: 50%;
+	height: 98%;
+	width: 9%;
+	/*left: 10%;*/
+	bottom: 21%;
+}
+
+.boneyarAreaDiv {
+	width: 100%;
+	height: 100%;
 }
 
 .playerArea {
-	position: relative;
-	bottom: 55%;
+    position: relative;
+    bottom: 54%;
+    height: 20%;
 }
