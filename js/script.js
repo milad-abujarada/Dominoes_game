@@ -1,5 +1,14 @@
 $(document).ready(function(){
 	console.log("DOM is ready");
+	// attaching a delegated click event handler on the player tiles area
+	$("#playerBoard").on( "click", ".tileVertical", function( event ) {
+	    console.log($(this).attr("id"));
+	});
+
+	//attaching a delegated click event handler on the boneyard's area
+	$("#boneyardTiles").on( "click", ".tileHorizontal", function( event ) {
+    console.log($( this ).attr("id"));
+	});
 	//initializing five arrays one to hold all the tiles before shuffling
 	//the second is to hold the boneyard tiles
 	//the third is to hold the player tiles
@@ -29,7 +38,6 @@ $(document).ready(function(){
 	//assigning the first tile in the play area to the playAreaTiles array
 	playAreaTiles.push(placeFirstTile(boneyardTiles));
 
-console.log(boneyardTiles);
 	//remove the 1st placed tile in the play area from the boneyard
 
 
