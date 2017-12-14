@@ -110,7 +110,7 @@ $(document).ready(function(){
 
 	//function to draw a tile for the boneyard
 	function drawBoneyardTile(aTile){
-		$("<div></div>").addClass(String(aTile.value1) + String(aTile.value2) + " tileHorizontal faceDownBlock").appendTo("#boneyardTiles");	
+		$("<div></div>").addClass(" tileHorizontal faceDownBlock").attr("id", String(aTile.value1) + String(aTile.value2)).appendTo("#boneyardTiles");	
 	};
 
 	//function draws the initial 14 tiles of the boneyard
@@ -124,4 +124,9 @@ $(document).ready(function(){
 	function placeFirstTile(boneyardTiles){
 		return boneyardTiles[Math.floor(Math.random()) * 14];
 	};
+
+	//function to remove the draw of a tile  
+	function removeTile (aTile, location){
+
+	}
 });
