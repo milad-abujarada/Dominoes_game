@@ -7,6 +7,10 @@ $(document).ready(function(){
 	//the fifth is the tiles that were placed in the play area;
 	let allTiles, boneyardTiles, playerTiles, computerTiles, playAreaTiles = [];
 
+	// array to be used for tranlating the number on a half a tile to the corresponding string 
+	// in order to be use in getting the right image from the images folder
+	let numberToString = ["zero", "one", "two", "three", "four", "five","six"];
+	let numberToStringHorizontal = ["zero", "one", "two", "three", "four", "five","horizontalSix"]
 	//creating the 28 tiles of the game
 	allTiles = createAllTiles();
 
@@ -24,13 +28,16 @@ $(document).ready(function(){
 
 	//assigning the first tile in the play area to the playAreaTiles array
 	playAreaTiles.push(placeFirstTile(boneyardTiles));
+
+	//draw the first tile in the play area to signal the game start
+	drawTilePlayArea(playAreaTiles[0].value1, playAreaTiles[0].value2, "tile1", numberToStringHorizontal);
 	console.log(playAreaTiles[0]);
 
 	//showing the computer's tiles on the page
 	drawComputerInitialTiles(computerTiles);
 
 	//showing the player's tiles on the page
-	drawPlayerInitialTiles(playerTiles);
+	drawPlayerInitialTiles(playerTiles, numberToString);
 
 	//showing the boneyard tiles on the page
 	drawBoneyardInitialTiles(boneyardTiles);
@@ -91,8 +98,7 @@ $(document).ready(function(){
 	};
 
 	//function to draw a tile for the player
-	function drawPlayerTile(aTile){
-		let numberToString = ["zero", "one", "two", "three", "four", "five","six"];
+	function drawPlayerTile(aTile, numberToString){
 		let upperPart = $("<div></div>").addClass("tileSquareVerticalTop").css("backgroundImage", "url(images/" + numberToString[aTile.value1]+".png");
 		let bottomPart = $("<div></div>").addClass("tileSquareVerticalBottom").css("backgroundImage", "url(images/" + numberToString[aTile.value2]+".png");
 		let verticalTile = $("<div></div>").addClass("tileVertical").attr("id", String(aTile.value1) + String(aTile.value2));
@@ -102,9 +108,9 @@ $(document).ready(function(){
 	};
 
 	//function draws the initial 7 tiles for the player
-	function drawPlayerInitialTiles(playerTiles){
+	function drawPlayerInitialTiles(playerTiles, numberToString){
 		for (let i = 0; i < playerTiles.length - 1; i++) {
-			drawPlayerTile(playerTiles[i]);
+			drawPlayerTile(playerTiles[i], numberToString);
 		}
 	};
 
@@ -125,8 +131,18 @@ $(document).ready(function(){
 		return boneyardTiles[Math.floor(Math.random()) * 14];
 	};
 
-	//function to remove the draw of a tile  
-	function removeTile (aTile, location){
-
+	//function draw a tile in the play area
+	function drawTilePlayArea(aTileRightValue, aTileLeftValue, location, numberToString){
+		let targetedTile = $("#" + location);
+		if (targetedTile.hasClass("emptyTile")){
+			targetedTile.removeClass("emptyTile");
+			$("<div></div>").addClass("tileSquareHorizontalRight").css("backgroundImage", "url(images/" + numberToString[aTileRightValue] +".png").appendTo(targetedTile);
+			$("<div></div>").addClass("tileSquareHorizontalLeft").css("backgroundImage", "url(images/" + numberToString[aTileLeftValue] +".png").appendTo(targetedTile);
+		}
 	}
+
+	// //function to remove the draw of a tile  
+	// function removeTile(aTile){
+	// 	$("#" + String(aTile.value1) + String(aTile.value2)).remove();
+	// }
 });

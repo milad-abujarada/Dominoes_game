@@ -83,13 +83,13 @@ section {
 .tileSquareHorizontalRight {
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
-	background-image: url('../images/horizontalSix.png');
+	/*background-image: url('../images/horizontalSix.png');*/
 }
 
 .tileSquareHorizontalLeft {
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
-	background-image: url('../images/three.png');
+	/*background-image: url('../images/three.png');*/
 }
 
 .faceDown,
