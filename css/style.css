@@ -113,7 +113,7 @@ section {
 
 .tileVerticalPlayAreaRight {
 	position: relative;
-	left: 45%;
+	left: 10%;
 }
 
 .emptyTile {
@@ -148,12 +148,13 @@ section {
     height: 55%;
     position: relative;
     left: 5%;
+    /*text-align: center;*/
     /*border:1px solid brown;*/
 }
 
 .playAreaRightColumn,
 .playAreaLeftColumn {
-	width: 10%;
+	width: 5%;
 	height: 100%;
 	display: inline-block;
 	/*border:1px solid aqua;*/
@@ -161,18 +162,29 @@ section {
 
 .playerScore,
 .computerScore {
-	width: 39%;
-	height: 100%;
+	width: 43%;
+	height: 95%;
+	position: relative;
+    bottom: 2%;
 	display: inline-block;
-	/*border:1px solid grey;*/
+	border-radius: 5px;
+	border:1px solid grey;
+}
+
+.playerScore {
+	padding-right: 3px;
+}
+
+.computerScore {
+	padding-right: 4px;
 }
 
 .playAreaDiv {
 	width: 100%;
 	height: 100%;
+	position: relative;
+    bottom: -2%;
 }
-
-
 
 .boneyardArea{
 	position: relative;
@@ -191,4 +203,5 @@ section {
     position: relative;
     bottom: 54%;
     height: 20%;
+
 }
