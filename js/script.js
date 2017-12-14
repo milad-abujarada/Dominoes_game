@@ -80,7 +80,7 @@ $(document).ready(function(){
 
 	//function to draw a tile for the computer 
 	function drawComputerTile(aTile){
-		$("<div></div>").addClass(String(aTile.value1) + String(aTile.value2) + " tileVertical faceDown").appendTo("#computerBoard");	
+		$("<div></div>").addClass("tileVertical faceDown").attr("id", String(aTile.value1) + String(aTile.value2)).appendTo("#computerBoard");	
 	};
 
 	//function draws the initial 7 tiles for the computer
