@@ -95,7 +95,7 @@ $(document).ready(function(){
 		let numberToString = ["zero", "one", "two", "three", "four", "five","six"];
 		let upperPart = $("<div></div>").addClass("tileSquareVerticalTop").css("backgroundImage", "url(images/" + numberToString[aTile.value1]+".png");
 		let bottomPart = $("<div></div>").addClass("tileSquareVerticalBottom").css("backgroundImage", "url(images/" + numberToString[aTile.value2]+".png");
-		let verticalTile = $("<div></div>").addClass(String(aTile.value1) + String(aTile.value2) + " tileVertical");
+		let verticalTile = $("<div></div>").addClass("tileVertical").attr("id", String(aTile.value1) + String(aTile.value2));
 		upperPart.appendTo(verticalTile);
 		bottomPart.appendTo(verticalTile);
 		verticalTile.appendTo("#playerBoard");
@@ -110,7 +110,7 @@ $(document).ready(function(){
 
 	//function to draw a tile for the boneyard
 	function drawBoneyardTile(aTile){
-		$("<div></div>").addClass(" tileHorizontal faceDownBlock").attr("id", String(aTile.value1) + String(aTile.value2)).appendTo("#boneyardTiles");	
+		$("<div></div>").addClass("tileHorizontal faceDownBlock").attr("id", String(aTile.value1) + String(aTile.value2)).appendTo("#boneyardTiles");	
 	};
 
 	//function draws the initial 14 tiles of the boneyard
