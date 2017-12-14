@@ -102,6 +102,24 @@ section {
 	margin-bottom: 3px;
 }
 
+.tileVerticalPlayAreaRight,
+.tileVerticalPlayAreaLeft {
+	height: 75px;
+	width: 40px;
+	border: 2px solid black;
+	display: block;
+	border-radius: 5px;
+}
+
+.tileVerticalPlayAreaRight {
+	position: relative;
+	left: 45%;
+}
+
+.emptyTile {
+	border-color: #f4f5f5;
+}
+
 .computerArea{
 /*	position: relative;
 	bottom: 1%;*/
@@ -154,19 +172,7 @@ section {
 	height: 100%;
 }
 
-.tileVerticalPlayAreaRight,
-.tileVerticalPlayAreaLeft {
-	height: 75px;
-	width: 40px;
-	border: 2px solid black;
-	display: block;
-	border-radius: 5px;
-}
 
-.tileVerticalPlayAreaRight {
-	position: relative;
-	left: 45%;
-}
 
 .boneyardArea{
 	position: relative;
