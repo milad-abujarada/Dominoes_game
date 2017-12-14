@@ -19,19 +19,22 @@ $(document).ready(function(){
 
 	//assigning the player his/her tiles
 	playerTiles = assignTiles(allTiles, 0, 6);
-
+	
 	//assigning the computer its tiles
 	computerTiles = assignTiles(allTiles, 7, 13);
 
 	//assigning the boneyard the 14 remaining tiles
 	boneyardTiles = assignTiles(allTiles, 14, 27);
-
+	
 	//assigning the first tile in the play area to the playAreaTiles array
 	playAreaTiles.push(placeFirstTile(boneyardTiles));
 
+console.log(boneyardTiles);
+	//remove the 1st placed tile in the play area from the boneyard
+
+
 	//draw the first tile in the play area to signal the game start
 	drawTilePlayArea(playAreaTiles[0].value1, playAreaTiles[0].value2, "tile1", numberToStringHorizontal);
-	console.log(playAreaTiles[0]);
 
 	//showing the computer's tiles on the page
 	drawComputerInitialTiles(computerTiles);
@@ -92,7 +95,7 @@ $(document).ready(function(){
 
 	//function draws the initial 7 tiles for the computer
 	function drawComputerInitialTiles(computerTiles){
-		for (let i = 0; i < computerTiles.length - 1; i++) {
+		for (let i = 0; i < computerTiles.length; i++) {
 			drawComputerTile(computerTiles[i]);
 		};
 	};
@@ -109,7 +112,7 @@ $(document).ready(function(){
 
 	//function draws the initial 7 tiles for the player
 	function drawPlayerInitialTiles(playerTiles, numberToString){
-		for (let i = 0; i < playerTiles.length - 1; i++) {
+		for (let i = 0; i < playerTiles.length; i++) {
 			drawPlayerTile(playerTiles[i], numberToString);
 		}
 	};
@@ -121,14 +124,18 @@ $(document).ready(function(){
 
 	//function draws the initial 14 tiles of the boneyard
 	function drawBoneyardInitialTiles(boneyardTiles){
-		for(let i = 0; i < boneyardTiles.length - 1; i++) {
+		for(let i = 0; i < boneyardTiles.length; i++) {
 			drawBoneyardTile(boneyardTiles[i]);
 		}
 	};
 
 	//function to place the initial tile in the play area in order to start the game
 	function placeFirstTile(boneyardTiles){
-		return boneyardTiles[Math.floor(Math.random()) * 14];
+		let index = Math.floor(Math.random() * 14);
+		let temp = boneyardTiles[index];
+		boneyardTiles[index] = boneyardTiles[boneyardTiles.length - 1];
+		boneyardTiles[boneyardTiles.length - 1] = temp; 
+		return boneyardTiles.pop();
 	};
 
 	//function draw a tile in the play area
@@ -139,7 +146,10 @@ $(document).ready(function(){
 			$("<div></div>").addClass("tileSquareHorizontalRight").css("backgroundImage", "url(images/" + numberToString[aTileRightValue] +".png").appendTo(targetedTile);
 			$("<div></div>").addClass("tileSquareHorizontalLeft").css("backgroundImage", "url(images/" + numberToString[aTileLeftValue] +".png").appendTo(targetedTile);
 		}
-	}
+	};
+
+	// //function to remove an element from an array and adjust the array
+	// function removeValueFromArray(index)
 
 	// //function to remove the draw of a tile  
 	// function removeTile(aTile){
