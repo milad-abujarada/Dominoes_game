@@ -1,10 +1,11 @@
 $(document).ready(function(){
 	console.log("DOM is ready");
-	//initializing four arrays one to hold all the tiles before shuffling
+	//initializing five arrays one to hold all the tiles before shuffling
 	//the second is to hold the boneyard tiles
 	//the third is to hold the player tiles
 	//the fourth to hold the computer tiles
-	let allTiles, boneyardTiles, playerTiles, computerTiles = [];
+	//the fifth is the tiles that were placed in the play area;
+	let allTiles, boneyardTiles, playerTiles, computerTiles, playAreaTiles = [];
 
 	//creating the 28 tiles of the game
 	allTiles = createAllTiles();
@@ -20,6 +21,10 @@ $(document).ready(function(){
 
 	//assigning the boneyard the 14 remaining tiles
 	boneyardTiles = assignTiles(allTiles, 14, 27);
+
+	//assigning the first tile in the play area to the playAreaTiles array
+	playAreaTiles.push(placeFirstTile(boneyardTiles));
+	console.log(playAreaTiles[0]);
 
 	//showing the computer's tiles on the page
 	drawComputerInitialTiles(computerTiles);
@@ -113,5 +118,10 @@ $(document).ready(function(){
 		for(let i = 0; i < boneyardTiles.length - 1; i++) {
 			drawBoneyardTile(boneyardTiles[i]);
 		}
+	};
+
+	//function to place the initial tile in the play area in order to start the game
+	function placeFirstTile(boneyardTiles){
+		return boneyardTiles[Math.floor(Math.random()) * 14];
 	};
 });
