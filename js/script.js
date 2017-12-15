@@ -1,14 +1,5 @@
 $(document).ready(function(){
 	console.log("DOM is ready");
-	// attaching a delegated click event handler on the player tiles area
-	$("#playerBoard").on( "click", ".tileVertical", function( event ) {
-	    console.log($(this).attr("id"));
-	});
-
-	//attaching a delegated click event handler on the boneyard's area
-	$("#boneyardTiles").on( "click", ".tileHorizontal", function( event ) {
-    console.log($( this ).attr("id"));
-	});
 	//initializing five arrays one to hold all the tiles before shuffling
 	//the second is to hold the boneyard tiles
 	//the third is to hold the player tiles
@@ -19,7 +10,21 @@ $(document).ready(function(){
 	// array to be used for tranlating the number on a half a tile to the corresponding string 
 	// in order to be use in getting the right image from the images folder
 	let numberToString = ["zero", "one", "two", "three", "four", "five","six"];
-	let numberToStringHorizontal = ["zero", "one", "two", "three", "four", "five","horizontalSix"]
+	let numberToStringHorizontal = ["zero", "one", "two", "three", "four", "five","horizontalSix"];
+	let toBeMovedTile = [];
+
+	// attaching a delegated click event handler on the player tiles area
+    $("#playerBoard").on( "click", ".tileVertical", function(event) { 
+    	removeHighlight();// calling removeHighlight function to remove any previously highlighted tile
+    	//highlighting the clicked tile and creating a tile object for it to be pushed into the ToBeMovedTile
+	    let clickedTileObject = new Tile(parseInt($(this).attr("id").charAt(0)),parseInt($(this).attr("id").charAt(1)));
+	    $(this).addClass("highlight");
+	});
+
+
+
+
+
 	//creating the 28 tiles of the game
 	allTiles = createAllTiles();
 
@@ -45,13 +50,13 @@ $(document).ready(function(){
 	drawTilePlayArea(playAreaTiles[0].value1, playAreaTiles[0].value2, "tile1", numberToStringHorizontal);
 
 	//showing the computer's tiles on the page
-	drawComputerInitialTiles(computerTiles);
+	drawComputerTiles(computerTiles);
 
 	//showing the player's tiles on the page
-	drawPlayerInitialTiles(playerTiles, numberToString);
+	drawPlayerTiles(playerTiles, numberToString);
 
 	//showing the boneyard tiles on the page
-	drawBoneyardInitialTiles(boneyardTiles);
+	drawBoneyardTiles(boneyardTiles);
 
 	//creating object tile
 	function Tile(value1, value2){
@@ -102,7 +107,7 @@ $(document).ready(function(){
 	};
 
 	//function draws the initial 7 tiles for the computer
-	function drawComputerInitialTiles(computerTiles){
+	function drawComputerTiles(computerTiles){
 		for (let i = 0; i < computerTiles.length; i++) {
 			drawComputerTile(computerTiles[i]);
 		};
@@ -119,7 +124,7 @@ $(document).ready(function(){
 	};
 
 	//function draws the initial 7 tiles for the player
-	function drawPlayerInitialTiles(playerTiles, numberToString){
+	function drawPlayerTiles(playerTiles, numberToString){
 		for (let i = 0; i < playerTiles.length; i++) {
 			drawPlayerTile(playerTiles[i], numberToString);
 		}
@@ -131,7 +136,7 @@ $(document).ready(function(){
 	};
 
 	//function draws the initial 14 tiles of the boneyard
-	function drawBoneyardInitialTiles(boneyardTiles){
+	function drawBoneyardTiles(boneyardTiles){
 		for(let i = 0; i < boneyardTiles.length; i++) {
 			drawBoneyardTile(boneyardTiles[i]);
 		}
@@ -146,6 +151,9 @@ $(document).ready(function(){
 		return boneyardTiles.pop();
 	};
 
+	// //function to return a removed value from an array
+	// function removeTile(arra)
+
 	//function draw a tile in the play area
 	function drawTilePlayArea(aTileRightValue, aTileLeftValue, location, numberToString){
 		let targetedTile = $("#" + location);
@@ -156,11 +164,38 @@ $(document).ready(function(){
 		}
 	};
 
-	// //function to remove an element from an array and adjust the array
-	// function removeValueFromArray(index)
+	//function to remove the highlighting of a tile
+	function removeHighlight(){
+		let previouslyClicked = $(".highlight");
+		if (previouslyClicked){
+			previouslyClicked.removeClass("highlight");
+		};
+	};
 
-	// //function to remove the draw of a tile  
-	// function removeTile(aTile){
-	// 	$("#" + String(aTile.value1) + String(aTile.value2)).remove();
-	// }
+	//function to remove tile from the player, computer, or boneyard areas
+	function removeTile(aTile, areaArray){
+		for(i = 0; i < areaArray.length; i++){
+			if (((aTile.value1 === areaArray[i].value1) && (aTile.value2 === areaArray[i].value2)) || ((aTile.value1 === areaArray[i].value2) && (aTile.value2 === areaArray[i].value1))){
+				areaArray.splice(i, 1);
+				return areaArray;
+			}
+		};
+	};
+
+	//function to place a tile in the play area
+	function placePlayAreaTile(aTile){
+		drawPlayerTiles(removeTile(aTile, tilePlace), numberToString);
+	};
+
+	//function to remove the draw of a tile  
+	function EraseTileDrawing(aTile){
+		$("#" + String(aTile.value1) + String(aTile.value2)).remove();
+	}
+	//////To Be Used/////// 
+	
+
+	// //attaching a delegated click event handler on the boneyard's area
+	// $("#boneyardTiles").on( "click", ".tileHorizontal", function(event) {
+ //    	let clickedTile = new Tile(parseInt($(this).attr("id").charAt(0)),parseInt($(this).attr("id").charAt(1)));
+	// });
 });
