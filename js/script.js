@@ -1,3 +1,4 @@
+var toBeMovedTile = [];
 $(document).ready(function(){
 	console.log("DOM is ready");
 	//initializing five arrays one to hold all the tiles before shuffling
@@ -11,13 +12,15 @@ $(document).ready(function(){
 	// in order to be use in getting the right image from the images folder
 	let numberToString = ["zero", "one", "two", "three", "four", "five","six"];
 	let numberToStringHorizontal = ["zero", "one", "two", "three", "four", "five","horizontalSix"];
-	let toBeMovedTile = [];
+	
 
 	// attaching a delegated click event handler on the player tiles area
     $("#playerBoard").on( "click", ".tileVertical", function(event) { 
     	removeHighlight();// calling removeHighlight function to remove any previously highlighted tile
+
     	//highlighting the clicked tile and creating a tile object for it to be pushed into the ToBeMovedTile
 	    let clickedTileObject = new Tile(parseInt($(this).attr("id").charAt(0)),parseInt($(this).attr("id").charAt(1)));
+	    prepearTileForMove(toBeMovedTile, clickedTileObject);// to push the clicked tiled into ToBeMovedTile
 	    $(this).addClass("highlight");
 	});
 
@@ -187,12 +190,20 @@ $(document).ready(function(){
 		drawPlayerTiles(removeTile(aTile, tilePlace), numberToString);
 	};
 
-	//function to remove the draw of a tile  
-	function EraseTileDrawing(aTile){
-		$("#" + String(aTile.value1) + String(aTile.value2)).remove();
-	}
+	//function to put the clicked tile in a variable prepearing it to be moved
+	function prepearTileForMove(toBeMovedTile, aTile){
+		if(toBeMovedTile.length){
+			toBeMovedTile.pop();
+		};
+		toBeMovedTile.push(aTile);
+	};
+
 	//////To Be Used/////// 
 	
+	// 	//function to remove the draw of a tile  
+	// function EraseTileDrawing(aTile){
+	// 	$("#" + String(aTile.value1) + String(aTile.value2)).remove();
+	// }
 
 	// //attaching a delegated click event handler on the boneyard's area
 	// $("#boneyardTiles").on( "click", ".tileHorizontal", function(event) {
