@@ -24,7 +24,10 @@ $(document).ready(function(){
 	    $(this).addClass("highlight");
 	});
 
-
+    // attaching a delegated click event handler on the play area that would triggered on empty tiles only
+    $("#playBoard").on( "click", ".emptyTile", function(event) { 
+    	console.log($(this).attr("id"));
+    });
 
 
 
