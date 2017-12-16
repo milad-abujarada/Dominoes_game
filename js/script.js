@@ -28,15 +28,19 @@ var numberToStringHorizontal = ["zero", "one", "two", "three", "four", "five","h
 $(document).ready(function(){
 	console.log("DOM is ready");//making sure script.js is linked correctly
 
-// 	// attaching a delegated click event handler on the player tiles area
-//     $("#playerBoard").on( "click", ".tileVertical", function(event) { 
-//     	removeHighlight();// calling removeHighlight function to remove any previously highlighted tile
+	// attaching a delegated click event handler on the player tiles area
+    $("#playerBoard").on( "click", ".tileVertical", function(event) { 
+    	removeHighlight();// calling removeHighlight function to remove any previously highlighted tile
 
-//     	//highlighting the clicked tile and creating a tile object for it to be pushed into the ToBeMovedTile
-// 	    let clickedTileObject = new Tile(parseInt($(this).attr("id").charAt(0)),parseInt($(this).attr("id").charAt(1)));
-// 	    prepearTileForMove(toBeMovedTile, clickedTileObject);// to push the clicked tiled into ToBeMovedTile
-// 	    $(this).addClass("highlight");
-// 	});
+    	//highlighting the clicked tile 
+    	highlightTile($(this).attr("id"));
+
+    	//and creating a tile object for it to be pushed into the ToBeMovedTile
+	    //let clickedTileObject = new Tile(parseInt($(this).attr("id").charAt(0)),parseInt($(this).attr("id").charAt(1)));
+
+	    //prepearTileForMove(toBeMovedTile, clickedTileObject);// to push the clicked tiled into ToBeMovedTile
+	    
+	});
 
 //     // attaching a delegated click event handler on the play area that would triggered on empty tiles only
 //     $("#playBoard").on( "click", ".emptyTile", function(event) { 
@@ -252,7 +256,18 @@ $(document).ready(function(){
 		};
 	};
 
+	//function to highlight a tile, it recieves the id of the tile to be highlighted and returns nothing
+	function highlightTile(tileId){
+		$("#" + tileId).addClass("highlight");
+	};
 
+	//function to remove the highlighting of a tile
+	function removeHighlight(){
+		let previouslyClicked = $(".highlight");
+		if (previouslyClicked){
+			previouslyClicked.removeClass("highlight");
+		};
+	};
 
 
 
@@ -262,13 +277,7 @@ $(document).ready(function(){
 
 
 
-	//function to remove the highlighting of a tile
-	function removeHighlight(){
-		let previouslyClicked = $(".highlight");
-		if (previouslyClicked){
-			previouslyClicked.removeClass("highlight");
-		};
-	};
+
 
 
 
