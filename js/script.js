@@ -8,10 +8,10 @@ function Tile(value1, value2){
 //or to be moved from the player side or the computer side to the playarea 
 var toBeMovedTile = new Tile();
 
-//to hold the sides that represent the available options to play against where index [0] represent 
+//availableSides to hold the sides that represent the available options to play against where index [0] represent 
 //the left open side of the left most tile and index [1] represent the open side of the right most tile
 var availableSides = [];
-
+var availableSidesLocation = [];
 //initializing five arrays one to hold all the tiles before shuffling
 //the second is to hold the boneyard tiles
 //the third is to hold the player tiles
@@ -29,26 +29,69 @@ $(document).ready(function(){
 	console.log("DOM is ready");//making sure script.js is linked correctly
 
 	// attaching a delegated click event handler on the player tiles area
-    $("#playerBoard").on( "click", ".tileVertical", function(event) { 
+    $("#playerBoard").on( "click", ".tileVertical", function(event){ 
     	removeHighlight();// calling removeHighlight function to remove any previously highlighted tile
 
     	//highlighting the clicked tile 
     	highlightTile($(this).attr("id"));
 
-    	//and creating a tile object for it to be pushed into the ToBeMovedTile
-	    //let clickedTileObject = new Tile(parseInt($(this).attr("id").charAt(0)),parseInt($(this).attr("id").charAt(1)));
-
-	    //prepearTileForMove(toBeMovedTile, clickedTileObject);// to push the clicked tiled into ToBeMovedTile
-	    
+		//prepearing the clicked tile to be moved
+    	prepearTileForMove(parseInt($(this).attr("id").charAt(0)), parseInt($(this).attr("id").charAt(1)));
 	});
 
-//     // attaching a delegated click event handler on the play area that would triggered on empty tiles only
-//     $("#playBoard").on( "click", ".emptyTile", function(event) { 
-//     	//check if any of the clicked empty tile neighbors is not empty
-//     	let neighboringTile = checkNeighbors($(this).attr("id"));
+    // attaching a delegated click event handler on the play area that would triggered on empty tiles only
+    $("#playBoard").on( "click", ".emptyTile", function(event){ 
+    	// checking if the player highlighted a tile to be moved or not
+    	//in case no highlighted tile then nothing happens
+    	if($(".highlight").length){
+    		//getting the clicked empty tile location and its occupied neighboring tile id if a neighbor is occupied
+    		let emptyTileId = $(this).attr("id");
+	    	let occupiedTileId = OccupiedNeighboringTile(emptyTileId);
+	    	let clickedTileLocation = emptyTileLocation(emptyTileId);
+	    	//checking if there is an occupied tile next to the clicked empty tile if there isn't then nothing happens
+	    	//otherwise proceed 
+	    	if(occupiedTileId){
+	    		//if the occupied tile is "tile1" then this the special case that need to handled seperatly
+		    	// if(occupiedTileId === "tile1"){
 
-//     	//in case one of the neighbors if not empty check if the player selected tile matches the open side
-//     	//next to the clicked empty tile
+		    	// }else{
+		    		//first we get the occupied tile index in availableSidesLocation array in order to match
+		    		//that value to the corresponding value in the availableSide array to determin the matching sides
+		    		let index = occupiedTileIndex(occupiedTileId, availableSidesLocation, emptyTileId);
+		    		let matchingSides = checkForMatch(index, toBeMovedTile, availableSides);
+		    		// if there are matching sides and the click wasn't on the other occupied tile on the other end
+		    		//of the played tiles then proceed
+		    		if(typeof matchingSides != "undefined"){
+		    			//geting the value of the not matching side 
+		    			let notMatchingSide = toBeMovedTile.value1 === matchingSides ? toBeMovedTile.value2 : toBeMovedTile.value1;
+		    			//check to see if the occupied tile is on the right or left, top or bottom of the clicked empty tile
+		    			let occupiedLocation = occupiedTileLocation(occupiedTileId, emptyTileId, clickedTileLocation);
+		    			//take the fact that occupiedLocation is known, and clickedTileLocation is know and do the calling of draw
+		    			//drawplayAreaTile then call adjust available sides and AvailableSidesLocation using index arraies, 
+		    			//add the tile in plarArea array, remove the tile from player
+		    			//area, remove divs from player area, redraw player area tiles, 
+		    			if((clickedTileLocation === "upperRow") && (occupiedLocation === "left")){
+		    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
+		    				index ? storeAvailableSides(availableSides,"" , notMatchingSide) : storeAvailableSides(availableSides, notMatchingSide);
+		    				index ? storeAvailableSidesLocation(availableSidesLocation,"" , emptyTileId) : storeAvailableSidesLocation(availableSidesLocation, emptyTileId);
+		    				removeTile(toBeMovedTile, playerTiles);
+		    				removeTilesDrawing("playerBoard", "tileVertical");
+		    				drawPlayerTiles(playerTiles, numberToString);
+		    			}
+		    			
+		    		};
+					//let foundMatch = checkForMatch(availableSides, availableSidesLocation, toBeMovedTile, occupiedTile, clickedTileLocation);
+					
+		    		//check for a match between the occupied tile values from the PlayAreaTiles
+		    		//figuring out which side the occupied tile is on, right or left of the empty tile, and if it's on the upper or lower row 
+		    		//of the play area or on the right or left side of the play area 
+		    	// }; 
+		    };
+    	}
+    	//let neighboringTile = checkNeighbors($(this).attr("id"));
+
+    	//in case one of the neighbors if not empty check if the player selected tile matches the open side
+    	//next to the clicked empty tile
 //     	if (neighboringTile){
 //     		//checking which side the tile will be placed on if right then clockwise and if left counter clockwise
 //     		let placingSide =[];
@@ -63,9 +106,9 @@ $(document).ready(function(){
 // //call functiong checkMatchingSides(toBeMovedTile, neighboringTile)
 //     	};
 
-//     	//if ($(this).hasClass("emptyTile")){console.log($(this).attr("id"));};
+    	//if ($(this).hasClass("emptyTile")){console.log($(this).attr("id"));};
     	
-//     });
+    });
 
 
 
@@ -102,12 +145,6 @@ $(document).ready(function(){
 
 	//draw the first tile in the play area to signal the game start
 	drawPlayAreaTile(playAreaTiles[0].value1, playAreaTiles[0].value2, "tile1", numberToStringHorizontal);
-
-
-
-
-
-
 
 	//create a tile using Tile constructor where the arguments are the values on the tiles sides and the return is a single tile
 	function createTile(value1, value2){
@@ -154,7 +191,7 @@ $(document).ready(function(){
 	//in order to place that tile in the play area to start the game
 	//the function takes an array of the tiles as an argument and returns a single random tile
 	//the function also uses function storeAvailableSides to store the values of the randomly selected tile 
-	//in the availableSides array
+	//in the availableSides array and its location in the availableSidesLocation array
 	function selectFirstTile(boneyardTiles){
 		let index = Math.floor(Math.random() * boneyardTiles.length);
 		let temp = boneyardTiles[index];
@@ -162,6 +199,7 @@ $(document).ready(function(){
 		boneyardTiles[boneyardTiles.length - 1] = temp; 
 		let firstTile = boneyardTiles.pop();
 		storeAvailableSides(availableSides, firstTile.value1, firstTile.value2);
+		storeAvailableSidesLocation(availableSidesLocation, "tile1", "tile1")
 		return firstTile;
 	};
 
@@ -172,15 +210,33 @@ $(document).ready(function(){
 	//the most left side value to index [0] and the most right side value to index [1]. 
 	function storeAvailableSides(availableSides, leftSide, rightSide){
 		if(availableSides.length){
-			if(leftSide){
+			if(leftSide || (leftSide === 0)){
 				availableSides[0] = leftSide;
 			};
-			if(rightSide){
+			if(rightSide || (rightSide === 0)){
 				availableSides[1] = rightSide;
 			};
 		}else{
 			availableSides.push(leftSide);
 			availableSides.push(rightSide);
+		};
+	};
+
+	//function to store the initial available two playing options location to be used in played tiles placement later
+	//The function takes in the array availableSidesLocation, the location of the tile in the most left side, and the location
+	//of the tile at the most right side as arguments. the function modifies the availableSidesLocation array by adding 
+	//the most left tile location to index [0] and the most right tile location to index [1]. 
+	function storeAvailableSidesLocation(availableSidesLocation, leftTileLocation, rightTileLocation){
+		if(availableSidesLocation.length){
+			if(leftTileLocation){
+				availableSidesLocation[0] = leftTileLocation;
+			};
+			if(rightTileLocation){
+				availableSidesLocation[1] = rightTileLocation;
+			};
+		}else{
+			availableSidesLocation.push(leftTileLocation);
+			availableSidesLocation.push(rightTileLocation);
 		};
 	};
 
@@ -242,8 +298,8 @@ $(document).ready(function(){
 	//function to draw a tile in the play area. the function recieves integer values for the left or top of a tile
 	//and right or bottom of a tile. In addition to the location the tile is going to be placed at and an array that
 	//matches the value of a one half of a tile to it's corresponding text value to retrieve the value matching image 
-	function drawPlayAreaTile(aTileLeftOrTopValue, aTileRightOrBottomValue, location, tileValuesImages){
-		let targetedTile = $("#" + location), verticalTiles = ["tile13", "tile14", "tile27", "tile28"];
+	function drawPlayAreaTile(aTileLeftOrTopValue, aTileRightOrBottomValue, emptyTileId, tileValuesImages){
+		let targetedTile = $("#" + emptyTileId), verticalTiles = ["tile13", "tile14", "tile27", "tile28"];
 		if(targetedTile.hasClass("emptyTile")){
 			targetedTile.removeClass("emptyTile");
 			if($.inArray(location, verticalTiles) === -1){
@@ -269,87 +325,127 @@ $(document).ready(function(){
 		};
 	};
 
-
-
-
-	// //function to return a removed value from an array
-	// function removeTile(arra)
-
-
-
-
-
-
-
-	//function to place a tile in the play area
-	function placePlayAreaTile(aTile){
-		drawPlayerTiles(removeTile(aTile, tilePlace), numberToString);
+	//function saves the values of a tile's halves in the toBeMovedTile object in order to prepear it for moving
+	//from one area in the game to another. The function receives the values of a tile and returns nothing
+	function prepearTileForMove(value1, value2){
+		toBeMovedTile.value1 = value1;
+		toBeMovedTile.value2 = value2;
 	};
 
-	//function to put the clicked tile in a variable prepearing it to be moved
-	function prepearTileForMove(toBeMovedTile, aTile){
-		if(toBeMovedTile.length){
-			toBeMovedTile.pop();
-		};
-		toBeMovedTile.push(aTile);
-	};
-
-	//function to check if any of the clicked empty tile neighbors is not empty in order to check for a match later
-	function checkNeighbors(emptyTile){
+	//function to check if any of the clicked empty tile neighbors is occupied in order to check for a match later
+	//the function takes in the empty clicked tile as an argument and return the occupied string with occupied tile id 
+	function OccupiedNeighboringTile(emptyTile){
 		let emptyTileId, neighboringTile1, neighboringTile2;
-		if (emptyTile.length === 5){
-			emptyTileId = parseInt(emptyTile.charAt(4));
-		} else {
-			emptyTileId = parseInt(emptyTile.charAt(4) + emptyTile.charAt(5));
-		};
+		emptyTileId = tileIdNumber(emptyTile);
 		neighboringTile1 = $("#tile" + String(emptyTileId - 1));
 		neighboringTile2 = $("#tile" + String((emptyTileId + 1) % 28));
-		if (!((neighboringTile1).hasClass("emptyTile"))){
+		if(!((neighboringTile1).hasClass("emptyTile"))){
 			return neighboringTile1.attr("id");
 		};
-		if (!((neighboringTile2).hasClass("emptyTile"))){
+		if(!((neighboringTile2).hasClass("emptyTile"))){
 			return neighboringTile2.attr("id");
 		};
 	};
 
-	//function to check for matching sides before moving a tile into the play area and returns the side on which
-	//the tile will be palced right is clockwise and left is counter clockwise
-	function checkMatchingSides(toBeMovedTile, availableSides){
-		placingParameters = [];
-		if (toBeMovedTile){
-			if ((toBeMovedTile[0].value1 === availableSides[0]) || (toBeMovedTile[0].value1 === availableSides[1])) {
-				placingParameters.push("left");
-				placingParameters.push(toBeMovedTile[0].value2);
-				placingParameters.push(toBeMovedTile[0].value1);
-			} else if ((toBeMovedTile[0].value2 === availableSides[0]) || (toBeMovedTile[0].value2 === availableSides[1])){
-				placingParameters.push("left");
-				placingParameters.push(toBeMovedTile[0].value1);
-				placingParameters.push(toBeMovedTile[0].value2);
-			};
-
-		};
-		return placingParameters;
+	//function to check the empty tile location takes in the empty tile id as an argument 
+	//and returns a string containing either upperRow, rightColumn, bottomRow, or leftColumn 
+	function emptyTileLocation(emptyTileId){
+		let locationNum;
+		locationNum = tileIdNumber(emptyTileId);
+		if((locationNum >= 2) && (locationNum <= 12)){
+			return "upperRow";
+		}else if((locationNum >= 13) && (locationNum <= 14)){
+			return "rightColumn";
+		}else if((locationNum >= 15) && (locationNum <= 26)){
+			return "bottomRow";
+		}else{
+			return "leftColumn";
+		}
 	};
 
-
-
-	//function to empty an array
-	function emptyArray(array){
-		if(array.length){
-			array.pop();
+	//function takes in the occupiedTile string and the availableSidesLocations array as arrguments and return
+	//the index of the occupiedTile in the array
+	function occupiedTileIndex(occupiedTile, availableSidesLocation, emptyTileId){
+		if(availableSidesLocation[0] === availableSidesLocation[1]){
+			if(tileIdNumber(emptyTileId) === 2){
+				return 1;
+			}else{
+				return 0;
+			};
+		}else{
+		return $.inArray(occupiedTile, availableSidesLocation);
 		};
-		return array;
-	}
+	};  
 
-	//////To Be Used/////// 
+	//function that takes in an index (integer values) that refer to the occupied tile available side in the availableSides array
+	//also it takes in the toBeMovedTile as an argument to compare its sides to the availableSide[index] for a match
+	//the function return the matched value
+	function checkForMatch(index, toBeMovedTile, availableSides){
+		if (toBeMovedTile.value1 === availableSides[index]) {
+			return toBeMovedTile.value1;
+		}else if (toBeMovedTile.value2 === availableSides[index]) {
+			return toBeMovedTile.value2;
+		};
+	};// i think this should check based on the location of the occupied tile except if the location is tile 28
+
+
+	//function recieves the occupied tile id and the empty tile id as string arrguments
+	//and returns right or left, top or bottom refering to the location of the occupied tile
+	function occupiedTileLocation(occupiedTileId, emptyTileId, clickedTileLocation){
+		let occupiedTileNum, emptyTileNum;
+		occupiedTileNum = tileIdNumber(occupiedTileId);
+		emptyTileNum = tileIdNumber(emptyTileId);	
+		 
+		if(clickedTileLocation === "upperRow"){
+			if (occupiedTileNum === (emptyTileNum - 1)){
+				return "left";
+			}else{
+				return "right";
+			};
+		}else if(clickedTileLocation === "bottomRow"){
+			if (occupiedTileNum === (emptyTileNum - 1)){
+				return "right";
+			}else{
+				return "left";
+			};
+		} else if(clickedTileLocation === "rightColumn"){
+			if (occupiedTileNum === (emptyTileNum - 1)){
+				return "top";
+			}else{
+				return "bottom";
+			};
+		}else{
+			if (occupiedTileNum === (emptyTileNum - 1)){
+				return "bottom";
+			}else{
+				return "top";
+			};
+		};
+	};
+
+//function that takes in a tile id a returns the number of the tile on the board without the string tile
+function tileIdNumber(tileId){
+	if(tileId.length === 5){
+		return parseInt(tileId.charAt(4));
+	} else {
+		return parseInt(tileId.charAt(4) + tileId.charAt(5));
+	}; 
 	
-	// 	//function to remove the draw of a tile  
-	// function EraseTileDrawing(aTile){
-	// 	$("#" + String(aTile.value1) + String(aTile.value2)).remove();
-	// }
+};
 
-	// //attaching a delegated click event handler on the boneyard's area
-	// $("#boneyardTiles").on( "click", ".tileHorizontal", function(event) {
- //    	let clickedTile = new Tile(parseInt($(this).attr("id").charAt(0)),parseInt($(this).attr("id").charAt(1)));
-	// });
+//function to remove tiles drawing from a specified area
+function removeTilesDrawing(area, tilesPositioning){
+	let tiles = $("#" + area + " ." + tilesPositioning);
+	console.log(tiles);
+	tiles.remove();
+};
+
+
+
+
+
+
+
+
+
 });
