@@ -72,8 +72,22 @@ $(document).ready(function(){
 		    			//area, remove divs from player area, redraw player area tiles, 
 		    			if((clickedTileLocation === "upperRow") && (occupiedLocation === "left")){
 		    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
-		    				index ? storeAvailableSides(availableSides,"" , notMatchingSide) : storeAvailableSides(availableSides, notMatchingSide);
-		    				index ? storeAvailableSidesLocation(availableSidesLocation,"" , emptyTileId) : storeAvailableSidesLocation(availableSidesLocation, emptyTileId);
+		    	/*index ? */storeAvailableSides(availableSides,"" , notMatchingSide) /*: storeAvailableSides(availableSides, notMatchingSide)*/;
+		    	/*index ? */storeAvailableSidesLocation(availableSidesLocation,"" , emptyTileId) /*: storeAvailableSidesLocation(availableSidesLocation, emptyTileId)*/;
+		    				removeTile(toBeMovedTile, playerTiles);
+		    				removeTilesDrawing("playerBoard", "tileVertical");
+		    				drawPlayerTiles(playerTiles, numberToString);
+		    			}else if((clickedTileLocation === "upperRow") && (occupiedLocation === "right")){
+		    				drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
+		    				storeAvailableSides(availableSides, notMatchingSide, "");
+		    				storeAvailableSidesLocation(availableSidesLocation,emptyTileId , "");
+		    				removeTile(toBeMovedTile, playerTiles);
+		    				removeTilesDrawing("playerBoard", "tileVertical");
+		    				drawPlayerTiles(playerTiles, numberToString);
+		    			}else if((clickedTileLocation === "leftColumn") && (occupiedLocation === "top")){
+		    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
+		    				storeAvailableSides(availableSides, notMatchingSide, "");
+		    				storeAvailableSidesLocation(availableSidesLocation, emptyTileId, "");
 		    				removeTile(toBeMovedTile, playerTiles);
 		    				removeTilesDrawing("playerBoard", "tileVertical");
 		    				drawPlayerTiles(playerTiles, numberToString);
@@ -299,10 +313,10 @@ $(document).ready(function(){
 	//and right or bottom of a tile. In addition to the location the tile is going to be placed at and an array that
 	//matches the value of a one half of a tile to it's corresponding text value to retrieve the value matching image 
 	function drawPlayAreaTile(aTileLeftOrTopValue, aTileRightOrBottomValue, emptyTileId, tileValuesImages){
-		let targetedTile = $("#" + emptyTileId), verticalTiles = ["tile13", "tile14", "tile27", "tile28"];
+		let targetedTile = $("#" + emptyTileId), verticalTiles = ["tile13", "tile14", "tile27", "tile0"];
 		if(targetedTile.hasClass("emptyTile")){
 			targetedTile.removeClass("emptyTile");
-			if($.inArray(location, verticalTiles) === -1){
+			if($.inArray(emptyTileId, verticalTiles) === -1){
 				$("<div></div>").addClass("tileSquareHorizontalRight").css("backgroundImage", "url(images/" + tileValuesImages[aTileRightOrBottomValue] +".png").appendTo(targetedTile);
 				$("<div></div>").addClass("tileSquareHorizontalLeft").css("backgroundImage", "url(images/" + tileValuesImages[aTileLeftOrTopValue] +".png").appendTo(targetedTile);
 			}else{
@@ -337,7 +351,7 @@ $(document).ready(function(){
 	function OccupiedNeighboringTile(emptyTile){
 		let emptyTileId, neighboringTile1, neighboringTile2;
 		emptyTileId = tileIdNumber(emptyTile);
-		neighboringTile1 = $("#tile" + String(emptyTileId - 1));
+		emptyTileId ? neighboringTile1 = $("#tile" + String(emptyTileId - 1)) : neighboringTile1 = $("#tile27") ;
 		neighboringTile2 = $("#tile" + String((emptyTileId + 1) % 28));
 		if(!((neighboringTile1).hasClass("emptyTile"))){
 			return neighboringTile1.attr("id");
@@ -436,7 +450,6 @@ function tileIdNumber(tileId){
 //function to remove tiles drawing from a specified area
 function removeTilesDrawing(area, tilesPositioning){
 	let tiles = $("#" + area + " ." + tilesPositioning);
-	console.log(tiles);
 	tiles.remove();
 };
 
