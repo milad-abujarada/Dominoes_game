@@ -72,8 +72,8 @@ $(document).ready(function(){
 		    			//area, remove divs from player area, redraw player area tiles, 
 		    			if((clickedTileLocation === "upperRow") && (occupiedLocation === "left")){
 		    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
-		    	/*index ? */storeAvailableSides(availableSides,"" , notMatchingSide) /*: storeAvailableSides(availableSides, notMatchingSide)*/;
-		    	/*index ? */storeAvailableSidesLocation(availableSidesLocation,"" , emptyTileId) /*: storeAvailableSidesLocation(availableSidesLocation, emptyTileId)*/;
+		    				storeAvailableSides(availableSides,"" , notMatchingSide);
+		    				storeAvailableSidesLocation(availableSidesLocation,"" , emptyTileId);
 		    				removeTile(toBeMovedTile, playerTiles);
 		    				removeTilesDrawing("playerBoard", "tileVertical");
 		    				drawPlayerTiles(playerTiles, numberToString);
@@ -84,8 +84,43 @@ $(document).ready(function(){
 		    				removeTile(toBeMovedTile, playerTiles);
 		    				removeTilesDrawing("playerBoard", "tileVertical");
 		    				drawPlayerTiles(playerTiles, numberToString);
+		    			}else if((clickedTileLocation === "bottomRow") && (occupiedLocation === "left")){
+		    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
+		    				storeAvailableSides(availableSides, notMatchingSide, "");
+		    				storeAvailableSidesLocation(availableSidesLocation, emptyTileId, "");
+		    				removeTile(toBeMovedTile, playerTiles);
+		    				removeTilesDrawing("playerBoard", "tileVertical");
+		    				drawPlayerTiles(playerTiles, numberToString);
+		    			}else if((clickedTileLocation === "bottomRow") && (occupiedLocation === "right")){
+		    				drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
+		    				storeAvailableSides(availableSides,"" , notMatchingSide);
+		    				storeAvailableSidesLocation(availableSidesLocation,"" , emptyTileId);
+		    				removeTile(toBeMovedTile, playerTiles);
+		    				removeTilesDrawing("playerBoard", "tileVertical");
+		    				drawPlayerTiles(playerTiles, numberToString);
 		    			}else if((clickedTileLocation === "leftColumn") && (occupiedLocation === "top")){
 		    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
+		    				storeAvailableSides(availableSides, notMatchingSide, "");
+		    				storeAvailableSidesLocation(availableSidesLocation, emptyTileId, "");
+		    				removeTile(toBeMovedTile, playerTiles);
+		    				removeTilesDrawing("playerBoard", "tileVertical");
+		    				drawPlayerTiles(playerTiles, numberToString);
+		    			}else if((clickedTileLocation === "leftColumn") && (occupiedLocation === "bottom")){
+		    				drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
+		    				storeAvailableSides(availableSides, notMatchingSide, "");
+		    				storeAvailableSidesLocation(availableSidesLocation, emptyTileId, "");
+		    				removeTile(toBeMovedTile, playerTiles);
+		    				removeTilesDrawing("playerBoard", "tileVertical");
+		    				drawPlayerTiles(playerTiles, numberToString);
+		    			}else if((clickedTileLocation === "righttColumn") && (occupiedLocation === "top")){
+		    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
+		    				storeAvailableSides(availableSides,"" , notMatchingSide);
+		    				storeAvailableSidesLocation(availableSidesLocation,"" , emptyTileId);
+		    				removeTile(toBeMovedTile, playerTiles);
+		    				removeTilesDrawing("playerBoard", "tileVertical");
+		    				drawPlayerTiles(playerTiles, numberToString);
+		    			}else if((clickedTileLocation === "righttColumn") && (occupiedLocation === "bottom")){
+		    				drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
 		    				storeAvailableSides(availableSides, notMatchingSide, "");
 		    				storeAvailableSidesLocation(availableSidesLocation, emptyTileId, "");
 		    				removeTile(toBeMovedTile, playerTiles);
