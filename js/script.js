@@ -8,7 +8,7 @@ function Tile(value1, value2){
 //or to be moved from the player side or the computer side to the playarea 
 var toBeMovedTile = new Tile();
 
-var blankTile = new Tile();
+//var blankTile = new Tile();
 
 //availableSides to hold the sides that represent the available options to play against where index [0] represent 
 //the left open side of the left most tile and index [1] represent the open side of the right most tile
@@ -39,7 +39,7 @@ $(document).ready(function(){
 
 		let tempTile = new Tile(parseInt($(this).attr("id").charAt(0)), parseInt($(this).attr("id").charAt(1)));
 
-		toBeMovedTile = blankTile;
+		//toBeMovedTile = blankTile;
 
 		//prepearing the clicked tile to be moved
     	toBeMovedTile =  playerTiles[findTile(tempTile, playerTiles)];//prepearTileForMove(playerTiles[findTile(tempTile, playerTiles)],toBeMovedTile);/* parseInt($(this).attr("id").charAt(0)), parseInt($(this).attr("id").charAt(1)));*/
@@ -111,7 +111,7 @@ $(document).ready(function(){
     });
 	$("#boneyardTiles").on( "click", ".faceDownBlock", function(event){
 console.log($(this).attr("id"));
-		toBeMovedTile = blankTile; //prepearTileForMove(blankTile, toBeMovedTile);
+		//toBeMovedTile = blankTile; //prepearTileForMove(blankTile, toBeMovedTile);
 		removeHighlight();// calling removeHighlight function to remove any previously highlighted tile
 		let tempTile = new Tile(parseInt($(this).attr("id").charAt(0)), parseInt($(this).attr("id").charAt(1)));
 		toBeMovedTile =  boneyardTiles[findTile(tempTile, boneyardTiles)];//prepearTileForMove(boneyardTiles[findTile(tempTile, boneyardTiles)], toBeMovedTile);
@@ -120,7 +120,7 @@ console.log($(this).attr("id"));
 		drawBoneyardTiles(boneyardTiles);
 		assignTile(toBeMovedTile, playerTiles);
 		eraseAndDrawPlayerTiles();
-		toBeMovedTile = blankTile; //prepearTileForMove(blankTile, toBeMovedTile);
+		//toBeMovedTile = blankTile; //prepearTileForMove(blankTile, toBeMovedTile);
 	});
 
 
@@ -129,27 +129,24 @@ console.log($(this).attr("id"));
 
 	//shuffling the tiles after creating them
 	shufflingTiles(allTiles);
-	console.log(allTiles);
 
 	//assigning the player his/her tiles
-	playerTiles = assignTiles(allTiles, 0, 6);
+	playerTiles = assignTiles(allTiles, 0, 13);
 	
 	//assigning the computer its tiles
-	computerTiles = assignTiles(allTiles, 7, 13);
+	//computerTiles = assignTiles(allTiles, 7, 13);
 
 	//assigning the boneyard the 14 remaining tiles
 	boneyardTiles = assignTiles(allTiles, 14, 27);
-	console.log(boneyardTiles);
 	
 	//assigning the first tile in the play area to the playAreaTiles array
 	let firstTile = selectFirstTile(boneyardTiles);
-	console.log(boneyardTiles);
 	
 	//remove the 1st placed tile in the play area from the boneyard
-	removeTile(firstTile, boneyardTiles);
-	console.log(boneyardTiles);
+	//removeTile(firstTile, boneyardTiles);
+	
 	//showing the computer's tiles on the page
-	drawComputerTiles(computerTiles);
+	//drawComputerTiles(computerTiles);
 
 	//showing the player's tiles on the page
 	drawPlayerTiles(playerTiles, numberToString);
@@ -268,13 +265,13 @@ console.log($(this).attr("id"));
 	//it takes in the to be removed tile and the array of tiles representing area of which the tile needs to be removed from 
 	//as arguments and returns a new array of tiles with the tile removed
 	function removeTile(aTile, areaArray){
-		let temp;
+/*		let temp;
 		for(i = findTile(aTile, areaArray); i < areaArray.length; i++ ){
 			areaArray[i] = areaArray[i + 1];
 		};
-		areaArray.pop();
-		/*areaArray.splice(findTile(aTile, areaArray), 1);
-		return areaArray;*/
+		areaArray.pop();*/
+		areaArray.splice(findTile(aTile, areaArray), 1);
+		//return areaArray;
 	};
 
 	//function to make a tile and place it in the computer area
