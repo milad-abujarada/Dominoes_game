@@ -131,10 +131,10 @@ console.log($(this).attr("id"));
 	shufflingTiles(allTiles);
 
 	//assigning the player his/her tiles
-	playerTiles = assignTiles(allTiles, 0, 13);
+	playerTiles = assignTiles(allTiles, 0, 6);
 	
 	//assigning the computer its tiles
-	//computerTiles = assignTiles(allTiles, 7, 13);
+	computerTiles = assignTiles(allTiles, 7, 13);
 
 	//assigning the boneyard the 14 remaining tiles
 	boneyardTiles = assignTiles(allTiles, 14, 27);
@@ -146,7 +146,7 @@ console.log($(this).attr("id"));
 	//removeTile(firstTile, boneyardTiles);
 	
 	//showing the computer's tiles on the page
-	//drawComputerTiles(computerTiles);
+	drawComputerTiles(computerTiles);
 
 	//showing the player's tiles on the page
 	drawPlayerTiles(playerTiles, numberToString);
