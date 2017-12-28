@@ -148,15 +148,8 @@ $(document).ready(function(){
 			let tempTile = new Tile(parseInt($(this).attr("id").charAt(0)), parseInt($(this).attr("id").charAt(1)));
 			toBeMovedTile =  boneyardTiles[findTile(tempTile, boneyardTiles)];
 
-			//removing the withdrawn tile from the boneyardTiles array
-			removeTile(toBeMovedTile, boneyardTiles);
-
-			//erasing the drawing of the boneyard tiles from the page
-			removeTilesDrawing("boneyardTiles", "faceDownBlock");
-
-			//redrawing the boneyardTiles after removing the withdrawn tile
-			drawBoneyardTiles(boneyardTiles);
-
+			tileWithdrawDrawing();
+			
 			//placing the withdrawn tile in the playersTiles array
 			assignTile(toBeMovedTile, playerTiles);
 
@@ -526,8 +519,21 @@ $(document).ready(function(){
 					changeActivePlayer(); 
 				}, 2000);
 
-			}else{}//this should do the widthdraw of a tile in case no match with the current set of computer tiles
-			
+			}else{
+				toBeMovedTile =  boneyardTiles[0];
+
+				tileWithdrawDrawing();
+				
+				//placing the withdrawn tile in the playersTiles array
+				assignTile(toBeMovedTile, computerTiles);
+
+				//erasing the player's tiles drawing from the page then redrawing the tiles with the withdrawn tile included
+				eraseAndDrawComputerTiles();
+				setTimeout(function(){
+					computerTurn();
+				},1250)
+				
+			};	
 		};
 	};
 
@@ -633,5 +639,18 @@ $(document).ready(function(){
 		}else if(clickedOrEmptyTileLocation === "rightColumn"){
 			occupiedLocation === "top" ? rightColumnTop(matchingSides, notMatchingSide) : rightColumnBottom(notMatchingSide, matchingSides);
 		};
+	};
+
+
+	function tileWithdrawDrawing(){
+		//removing the withdrawn tile from the boneyardTiles array
+		removeTile(toBeMovedTile, boneyardTiles);
+
+		//erasing the drawing of the boneyard tiles from the page
+		removeTilesDrawing("boneyardTiles", "faceDownBlock");
+
+		//redrawing the boneyardTiles after removing the withdrawn tile
+		drawBoneyardTiles(boneyardTiles);
+
 	};
 });
