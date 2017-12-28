@@ -20,7 +20,7 @@ availableSidesLocation corresponds to the location of each of those sides in the
 var availableSides = [];
 var availableSidesLocation = [];
 
-var occupiedTileId, emptyTileId;
+var occupiedTileId, emptyTileId, clickedOrEmptyTileLocation, occupiedLocation;
 
 /* Initializing four arrays one to hold all the tiles before shuffling
 the second is to hold the boneyard tiles
@@ -98,7 +98,7 @@ $(document).ready(function(){
 
     		//determining the clicked empty tile location and its occupied neighboring tile id if one is occupied
     		emptyTileId = $(this).attr("id");
-    		let clickedTileLocation = emptyTileLocation(emptyTileId);
+    		clickedOrEmptyTileLocation = emptyTileLocation(emptyTileId);
 	    	occupiedTileId = OccupiedNeighboringTile(emptyTileId);
 
 	    	// checking if there is an occupied tile next to the clicked empty tile in order to proceed 
@@ -117,47 +117,18 @@ $(document).ready(function(){
 	    			let notMatchingSide = toBeMovedTile.value1 === matchingSides ? toBeMovedTile.value2 : toBeMovedTile.value1;
 
 	    			//check to see if the occupied tile is on the right or left, top or bottom of the clicked empty tile
-	    			let occupiedLocation = occupiedTilePosition(occupiedTileId, emptyTileId, clickedTileLocation);
+	    			occupiedLocation = occupiedTilePosition(occupiedTileId, emptyTileId, clickedOrEmptyTileLocation);
 
 	    			/* after obtaining all the necessary information in order to place the tile the right way, the tile gets
 	    			drawn on the page in the clicked empty tile, the values in the availableSides and availableSidesLocations 
 	    			arrays of the corresponding new open side gets changed, then lastly the player area gets redrawn with
-	    			the new set of tiles after the played tile is removed*/ 
-	    			if((clickedTileLocation === "upperRow") && (occupiedLocation === "left")){
-	    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
-	    				changingOnethAvailableSide(notMatchingSide, emptyTileId);
-	    				drawingPlayersMove();
-	    			}else if((clickedTileLocation === "upperRow") && (occupiedLocation === "right")){
-	    				drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
-	    				changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	    				drawingPlayersMove();
-	    			}else if((clickedTileLocation === "bottomRow") && (occupiedLocation === "left")){
-	    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
-	    				changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	    				drawingPlayersMove();
-	    			}else if((clickedTileLocation === "bottomRow") && (occupiedLocation === "right")){
-	    				drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
-	    				changingOnethAvailableSide(notMatchingSide, emptyTileId);
-	    				drawingPlayersMove();
-	    			}else if((clickedTileLocation === "leftColumn") && (occupiedLocation === "top")){
-	    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
-	    				changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	    				drawingPlayersMove();
-	    			}else if((clickedTileLocation === "leftColumn") && (occupiedLocation === "bottom")){
-	    				drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
-	    				changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	    				drawingPlayersMove();
-	    			}else if((clickedTileLocation === "rightColumn") && (occupiedLocation === "top")){
-	    				drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
-	    				changingOnethAvailableSide(notMatchingSide, emptyTileId);
-	    				drawingPlayersMove();
-	    			}else if((clickedTileLocation === "rightColumn") && (occupiedLocation === "bottom")){
-	    				drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
-	    				changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	    				drawingPlayersMove();
-	    			};	
-	    			changeActivePlayer();
-	    			computerTurn();	
+	    			the new set of tiles after the played tile is removed then the active player is changed */ 
+	    			playTile(matchingSides, notMatchingSide);	
+	    			drawingPlayersMove();
+	    			setTimeout(function(){
+	    				changeActivePlayer();
+		    			computerTurn();	
+	    			}, 1250);
 	    		};	 
 		    }; 
     	};	
@@ -444,24 +415,24 @@ $(document).ready(function(){
 	/* function recieves the occupied tile id and the empty tile id as string arrguments
 	and returns "right" or "left", "top" or "bottom", refering to the location of the occupied tile 
 	in relative to the clicked on empty tile */
-	function occupiedTilePosition(occupiedTileId, emptyTileId, clickedTileLocation){
+	function occupiedTilePosition(occupiedTileId, emptyTileId, clickedOrEmptyTileLocation){
 		let occupiedTileNum, emptyTileNum;
 		occupiedTileNum = tileIdNumber(occupiedTileId);
 		emptyTileNum = tileIdNumber(emptyTileId);	
 		 
-		if(clickedTileLocation === "upperRow"){
+		if(clickedOrEmptyTileLocation === "upperRow"){
 			if (occupiedTileNum === (emptyTileNum - 1)){
 				return "left";
 			}else{
 				return "right";
 			};
-		}else if(clickedTileLocation === "bottomRow"){
+		}else if(clickedOrEmptyTileLocation === "bottomRow"){
 			if (occupiedTileNum === (emptyTileNum - 1)){
 				return "right";
 			}else{
 				return "left";
 			};
-		} else if(clickedTileLocation === "rightColumn"){
+		} else if(clickedOrEmptyTileLocation === "rightColumn"){
 			if (occupiedTileNum === (emptyTileNum - 1)){
 				return "top";
 			}else{
@@ -505,6 +476,18 @@ $(document).ready(function(){
 		drawPlayerTiles(playerTiles, numberToString);
 	};
 
+	//
+	function drawingComputersMove(){
+		removeTile(toBeMovedTile, computerTiles);
+		eraseAndDrawComputerTiles();
+	};
+
+	//
+	function eraseAndDrawComputerTiles(){
+		removeTilesDrawing("computerBoard", "tileVertical");
+		drawComputerTiles(computerTiles);
+	};
+
 	/* function to change the values of the [1] index in storeAvailableSides and storeAvailableSidesLocation
 	arrays after a move was made */
 	function changingOnethAvailableSide(notMatchingSide, emptyTileId){
@@ -530,15 +513,18 @@ $(document).ready(function(){
 	};
 
 	function computerTurn(){
-		
 		if(sessionStorage.activePlayer === "computer"){
 			let matchingSides = computerFunctionality(computerTiles, availableSides);
 			if(typeof matchingSides !== "undefined"){
 				let notMatchingSide;
 				toBeMovedTile.value1 === matchingSides ? notMatchingSide = toBeMovedTile.value2 : notMatchingSide = toBeMovedTile.value1;
 				setTimeout(function(){
+					clickedOrEmptyTileLocation = emptyTileLocation(emptyTileId);
+					occupiedLocation = occupiedTilePosition(occupiedTileId, emptyTileId, clickedOrEmptyTileLocation);
+					playTile(matchingSides, notMatchingSide);	
+	    			drawingComputersMove();
 					changeActivePlayer(); 
-				}, 3000);
+				}, 2000);
 
 			}else{}//this should do the widthdraw of a tile in case no match with the current set of computer tiles
 			
@@ -559,7 +545,6 @@ $(document).ready(function(){
 					highlightTile(String(toBeMovedTile.value1) + String(toBeMovedTile.value2));
 					occupiedTileId = availableSidesLocation[availableSidesindex];
 					emptyNeighboringTile(occupiedTileId, availableSidesindex);
-					console.log(emptyTileId);
 					return matchingSide;
 				};
 				availableSidesindex++;
@@ -588,5 +573,65 @@ $(document).ready(function(){
 				emptyTileId = neighboringTile2.attr("id");
 			};
 		};	
+	};
+
+
+	function upperRowLeft(matchingSides, notMatchingSide){
+		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
+		changingOnethAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+
+	function upperRowRight(notMatchingSide, matchingSides){
+		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+
+	function bottomRowLeft(matchingSides, notMatchingSide){
+		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+
+	function bottomRowRight(notMatchingSide, matchingSides){
+		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
+		changingOnethAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+
+	function leftColumnTop(matchingSides, notMatchingSide){
+		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+	function leftColumnBottom(notMatchingSide, matchingSides){
+		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+
+	function rightColumnTop(matchingSides, notMatchingSide){
+		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
+		changingOnethAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+
+	function rightColumnBottom(notMatchingSide, matchingSides){
+		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+
+	function playTile(matchingSides, notMatchingSide){
+		if(clickedOrEmptyTileLocation === "upperRow"){
+			occupiedLocation === "left" ? upperRowLeft(matchingSides, notMatchingSide) : upperRowRight(notMatchingSide, matchingSides);	
+		}else if(clickedOrEmptyTileLocation === "bottomRow"){
+			occupiedLocation === "left" ? bottomRowLeft(matchingSides, notMatchingSide) : bottomRowRight(notMatchingSide, matchingSides);
+		}else if(clickedOrEmptyTileLocation === "leftColumn"){
+			occupiedLocation === "top" ? leftColumnTop(matchingSides, notMatchingSide) : leftColumnBottom(notMatchingSide, matchingSides);
+		}else if(clickedOrEmptyTileLocation === "rightColumn"){
+			occupiedLocation === "top" ? rightColumnTop(matchingSides, notMatchingSide) : rightColumnBottom(notMatchingSide, matchingSides);
+		};
 	};
 });
