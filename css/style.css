@@ -51,19 +51,19 @@ section {
 .tileSquareVerticalTop {
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
-	background-image: url('../images/one.png');
+	/*background-image: url('../images/one.png');*/
 	
 }
 
 .tileSquareVerticalBottom {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
-	background-image: url('../images/six.png');
+	/*background-image: url('../images/six.png');*/
 }
 
 .tileSquareVerticalTop,
 .tileSquareVerticalBottom {
-	height: 44%;
+	height: 46%;
 	border:2px solid red;
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -73,7 +73,7 @@ section {
 .tileSquareHorizontalRight {
 	display: block;
 	height: 90%;
-	width: 43%;
+	width: 44%;
 	border:2px solid red;
 	float: right;
 	background-size: contain;
@@ -89,6 +89,7 @@ section {
 .tileSquareHorizontalLeft {
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
+	width: 45%;
 	/*background-image: url('../images/three.png');*/
 }
 
@@ -208,4 +209,8 @@ section {
 
 .highlight{
 	box-shadow: 3px 3px 5px red;
+}
+
+.tileVerticalPlayAreaLeft .tileSquareVerticalBottom{
+	height: 43%;;
 }
