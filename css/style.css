@@ -212,5 +212,9 @@ section {
 }
 
 .tileVerticalPlayAreaLeft .tileSquareVerticalBottom{
-	height: 43%;;
+	height: 43%;
+}
+
+.tileVerticalPlayAreaRight .tileSquareVerticalBottom{
+	height: 43%;
 }
