@@ -1,8 +1,9 @@
 //creating session storages to represent the activePlayer, the round, and the scores of the player and the computer
-sessionStorage.activePlayer = "player";
-sessionStorage.round = 1;
-sessionStorage.playerScore = 0;
-sessionStorage.computerScore = 0;
+localStorage.activePlayer = "player";
+localStorage.round = 1;
+localStorage.playerScore = 0;
+localStorage.computerScore = 0;
+localStorage.lastRoundWinner = '';
 
 // Tile object construction function used to create the game tiles
 function Tile(value1, value2){
@@ -36,43 +37,16 @@ var numberToStringHorizontal = ["zero", "one", "two", "three", "four", "five","h
 
 $(document).ready(function(){
 
-	//making sure script.js is linked correctly
-	console.log("DOM is ready");
+	startGame();
 
-	//creating the 28 tiles of the game
-	allTiles = createAllTiles();
+	setScore();
 
-	//shuffling the tiles after creating them
-	shufflingTiles(allTiles);
-
-	//assigning the player his/her tiles
-	playerTiles = assignTiles(allTiles, 0, 6);
-	
-	//assigning the computer its tiles
-	computerTiles = assignTiles(allTiles, 7, 13);
-
-	//assigning the boneyard the 14 remaining tiles
-	boneyardTiles = assignTiles(allTiles, 14, 27);
-	
-	//selecting the first tile from the boneyardTiles array to be placed in the playarea to start the game
-	let firstTile = selectFirstTile(boneyardTiles);
-
-	//placing the first tile in the play area to signal the game start
-	drawPlayAreaTile(firstTile.value1, firstTile.value2, "tile1", numberToStringHorizontal);
-	
-	//placing the computer's tiles on the page
-	drawComputerTiles(computerTiles);
-
-	//placing the player's tiles on the page
-	drawPlayerTiles(playerTiles, numberToString);
-
-	//placing the boneyard tiles on the page
-	drawBoneyardTiles(boneyardTiles);
+	setIntialActivePlayerBackground();
 
 	// attaching a delegated click event handler on the player tiles area
     $("#playerBoard").on( "click", ".tileVertical", function(event){ 
 
-    	if(sessionStorage.activePlayer === "player"){
+    	if(localStorage.activePlayer === "player"){
 
 	    	// calling removeHighlight function to remove any previously highlighted tile
 	    	removeHighlight();
@@ -94,7 +68,7 @@ $(document).ready(function(){
 
 		/* checking if the player highlighted a tile to be moved or not
     	in case no highlighted tile then nothing happens*/
-    	if($(".highlight").length && (sessionStorage.activePlayer === "player")){
+    	if($(".highlight").length && (localStorage.activePlayer === "player")){
 
     		//determining the clicked empty tile location and its occupied neighboring tile id if one is occupied
     		emptyTileId = $(this).attr("id");
@@ -124,11 +98,18 @@ $(document).ready(function(){
 	    			arrays of the corresponding new open side gets changed, then lastly the player area gets redrawn with
 	    			the new set of tiles after the played tile is removed then the active player is changed */ 
 	    			playTile(matchingSides, notMatchingSide);	
-	    			drawingPlayersMove();
-	    			setTimeout(function(){
-	    				changeActivePlayer();
-		    			computerTurn();	
-	    			}, 1250);
+	    			drawingPlayersMove(checkForAWin);
+	    			if(localStorage.activePlayer){
+	    				setTimeout(function(){
+	    					backgroundForActivePlayer();
+		    				changeActivePlayer();
+		    				setTimeout(function(){
+		    					computerTurn();
+		    				},1250);
+		    			}, 1250);
+	    			}else {
+	    				calculatePoints(computerTiles);
+	    			}	
 	    		};	 
 		    }; 
     	};	
@@ -137,7 +118,7 @@ $(document).ready(function(){
 	// attaching a delegated click event handler on the boneyard area that allows the player to withdraw a tile
 	$("#boneyardTiles").on( "click", ".faceDownBlock", function(event){
 
-		if(sessionStorage.activePlayer === "player"){
+		if(localStorage.activePlayer === "player"){
 
 			/* calling removeHighlight function to remove any previously highlighted tile in case the player
 			highlighted one of his/her tiles before withdrawing a tile */
@@ -158,6 +139,50 @@ $(document).ready(function(){
 		};
 	});
 
+	function startGame(){
+		availableSides = [];
+		availableSidesLocation = [];
+		allTiles = [];
+		boneyardTiles = []; 
+		playerTiles = []; 
+		computerTiles = [];
+		occupiedTileId = undefined; 
+		emptyTileId = undefined; 
+		clickedOrEmptyTileLocation = undefined; 
+		occupiedLocation = undefined;
+		//making sure script.js is linked correctly
+		console.log("DOM is ready");
+
+		//creating the 28 tiles of the game
+		allTiles = createAllTiles();
+
+		//shuffling the tiles after creating them
+		shufflingTiles(allTiles);
+
+		//assigning the player his/her tiles
+		playerTiles = assignTiles(allTiles, 0, 6);
+		
+		//assigning the computer its tiles
+		computerTiles = assignTiles(allTiles, 7, 13);
+
+		//assigning the boneyard the 14 remaining tiles
+		boneyardTiles = assignTiles(allTiles, 14, 27);
+		
+		//selecting the first tile from the boneyardTiles array to be placed in the playarea to start the game
+		let firstTile = selectFirstTile(boneyardTiles);
+
+		//placing the first tile in the play area to signal the game start
+		drawPlayAreaTile(firstTile.value1, firstTile.value2, "tile1", numberToStringHorizontal);
+		
+		//placing the computer's tiles on the page
+		drawComputerTiles(computerTiles);
+
+		//placing the player's tiles on the page
+		drawPlayerTiles(playerTiles, numberToString);
+
+		//placing the boneyard tiles on the page
+		drawBoneyardTiles(boneyardTiles);
+	}
 	/* create a tile using Tile constructor function 
 	the arguments are the values on a tile's sides and the return is a single tile object*/
 	function createTile(value1, value2){
@@ -331,6 +356,36 @@ $(document).ready(function(){
 		};
 	};
 
+	function newGame(){
+		location.reload();
+	};
+
+	function newRound(){
+		removeTilesDrawing("playerBoard", "tileVertical");
+		removeTilesDrawing("computerBoard", "tileVertical");
+		removeTilesDrawing("boneyardTiles", "faceDownBlock");
+		$(".tileSquareVerticalTop").remove();
+		$(".tileSquareVerticalBottom").remove();
+		$(".tileSquareHorizontalRight").remove();
+		$(".tileSquareHorizontalLeft").remove();
+		$(".tileHorizontal").addClass("emptyTile");
+		$(".tileVerticalPlayAreaRight").addClass("emptyTile");
+		$(".tileVerticalPlayAreaLeft").addClass("emptyTile");
+		$("button").remove();
+		$(".winner").remove();
+		startGame();
+		localStorage.activePlayer = localStorage.lastRoundWinner;
+		if(localStorage.activePlayer === "computer"){
+			computerTurn();
+		};
+		console.log("boneyardTiles", boneyardTiles);
+		console.log("playerTiles", playerTiles);
+		console.log("computerTile", computerTiles);
+		console.log("toBeMovedTile", toBeMovedTile);
+		console.log("availableSides", availableSides);
+		console.log("availableSidesLocation", availableSidesLocation);
+	};
+
 	//function to highlight a tile, it takes in the id of the tile to be highlighted as an argument
 	function highlightTile(tileId){
 		$("#" + tileId).addClass("highlight");
@@ -457,9 +512,11 @@ $(document).ready(function(){
 	};
 
 	// function to draw the player's move after he/she chooses a tile and places it in the right place
-	function drawingPlayersMove(){
+	function drawingPlayersMove(checkForAWin){
 		removeTile(toBeMovedTile, playerTiles);
 		eraseAndDrawPlayerTiles();
+		checkForAWin(playerTiles);
+		
 	};
 
 	/* function used to erase all the drawing of the tiles on the player side and redraw them.
@@ -470,9 +527,10 @@ $(document).ready(function(){
 	};
 
 	//
-	function drawingComputersMove(){
+	function drawingComputersMove(checkForAWin){
 		removeTile(toBeMovedTile, computerTiles);
 		eraseAndDrawComputerTiles();
+		checkForAWin(computerTiles);
 	};
 
 	//
@@ -500,13 +558,13 @@ $(document).ready(function(){
 		arrayOfTiles.push(aTile);
 	};
 
-	//function to change the sessionStorage.activePlayer after a move has been made by either sides (player or computer)
+	//function to change the localStorage.activePlayer after a move has been made by either sides (player or computer)
 	function changeActivePlayer(){
-		sessionStorage.activePlayer === "player" ? sessionStorage.activePlayer = "computer" : sessionStorage.activePlayer = "player";
+		localStorage.activePlayer === "player" ? localStorage.activePlayer = "computer" : localStorage.activePlayer = "player";
 	};
 
 	function computerTurn(){
-		if(sessionStorage.activePlayer === "computer"){
+		if(localStorage.activePlayer === "computer"){
 			let matchingSides = computerFunctionality(computerTiles, availableSides);
 			if(typeof matchingSides !== "undefined"){
 				let notMatchingSide;
@@ -515,9 +573,16 @@ $(document).ready(function(){
 					clickedOrEmptyTileLocation = emptyTileLocation(emptyTileId);
 					occupiedLocation = occupiedTilePosition(occupiedTileId, emptyTileId, clickedOrEmptyTileLocation);
 					playTile(matchingSides, notMatchingSide);	
-	    			drawingComputersMove();
-					changeActivePlayer(); 
-				}, 2000);
+	    			drawingComputersMove(checkForAWin);
+	    			if(localStorage.activePlayer){
+	    				changeActivePlayer(); 
+	    				setTimeout(function(){
+	    					backgroundForActivePlayer();
+	    				}, 1000);	
+	    			}else{
+	    				calculatePoints(playerTiles);
+	    			};
+				}, 1000);
 
 			}else{
 				toBeMovedTile =  boneyardTiles[0];
@@ -531,7 +596,7 @@ $(document).ready(function(){
 				eraseAndDrawComputerTiles();
 				setTimeout(function(){
 					computerTurn();
-				},1250)
+				},1000);
 				
 			};	
 		};
@@ -564,7 +629,7 @@ $(document).ready(function(){
 	the second if the occupied tile is tile 0, the second if the occupied tile is any other tile in the play area */
 	function emptyNeighboringTile(occupiedTile, index){
 		if(availableSidesLocation[0] === availableSidesLocation[1]){
-			index ? emptyTileId = availableSidesLocation[1] :emptyTileId = availableSidesLocation[0];
+			index ? emptyTileId = "tile2" :emptyTileId = "tile0";
 		}else if(occupiedTile === "tile0"){
 			emptyTileId = "tile27";
 		}else{
@@ -653,4 +718,56 @@ $(document).ready(function(){
 		drawBoneyardTiles(boneyardTiles);
 
 	};
+
+
+	function checkForAWin(activePlayerTiles){
+		if(!activePlayerTiles.length){
+			localStorage.lastRoundWinner = localStorage.activePlayer;
+			localStorage.activePlayer = "";
+			drawWinner();
+		};
+	};
+
+	function drawWinner(){
+		if(localStorage.lastRoundWinner === "player"){
+			$("#playerBoard").append("<div class=\"winner\">Ladies and Gentelmen we have a WINNER :)</div>");
+			$("<button type=\"button\">start next round</button>").click(function(){
+				newRound()}).appendTo($("#playerBoard"));
+		}else{
+			$("#computerBoard").append("<div class=\"winner\">The BITS have you now :)</div>");
+			$("<button type=\"button\">start next round</button>").click(function(){
+				newRound()}).appendTo($("#computerBoard"));
+		};
+	};
+
+	function setScore(){
+		$("#computerScore").text(localStorage.computerScore);
+		$("#playerScore").text(localStorage.playerScore);
+	};
+
+	function setIntialActivePlayerBackground(){
+		$("."+localStorage.activePlayer+"Score").toggleClass("activePlayer");
+	};
+
+	function backgroundForActivePlayer(){
+		$(".playerScore").toggleClass("activePlayer");
+		$(".computerScore").toggleClass("activePlayer");
+	};
+
+	function calculatePoints(loserTiles){
+		let points = 0;
+		for(let i = 0; i < loserTiles.length; i++) {
+			if((loserTiles[i].value1 === 0) && (loserTiles[i].value2 === 0)){
+				points += 25;
+			};
+			points += (loserTiles[i].value1 + loserTiles[i].value2);
+		};
+		if(localStorage.lastRoundWinner === "player"){
+			localStorage.playerScore = parseInt(localStorage.playerScore) + points;
+		}else{
+			localStorage.computerScore = parseInt(localStorage.computerScore) + points;
+		};
+		setScore();
+	};
+
 });

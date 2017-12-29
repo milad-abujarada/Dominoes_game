@@ -9,6 +9,7 @@ html {
 /*making sure the body has the same height as the html document*/
 body {
 	height: 100%;
+	background-color: #40d040;
 }
 
 /*making sure the container for the entire game has the same height as the body*/
@@ -67,6 +68,7 @@ section {
 	border:2px solid red;
 	background-size: contain;
 	background-repeat: no-repeat;
+	background-color: white;
 }
 
 .tileSquareHorizontalLeft,
@@ -78,6 +80,7 @@ section {
 	float: right;
 	background-size: contain;
 	background-repeat: no-repeat;
+	background-color: white;
 }
 
 .tileSquareHorizontalRight {
@@ -95,7 +98,7 @@ section {
 
 .faceDown,
 .faceDownBlock {
-	background-color: black;
+	background-color: #296be4;
 }
 
 .faceDownBlock {
@@ -161,24 +164,42 @@ section {
 	/*border:1px solid aqua;*/
 }
 
+.playAreaRightColumn{
+	margin-left: 1%;
+}
+
 .playerScore,
 .computerScore {
-	width: 43%;
+/*	width: 43%;
 	height: 95%;
 	position: relative;
     bottom: 2%;
 	display: inline-block;
 	border-radius: 5px;
 	border:1px solid grey;
+	box-sizing: border-box;*/
+	width: 43%;
+    height: 95%;
+    position: relative;
+    bottom: 38%;
+    display: inline-block;
+    border-radius: 5px;
+    border: 1px solid grey;
+    box-sizing: border-box;
+    left: 5px;
+    text-align: center;
+    font-family: 'Ravi Prakash', cursive;
+    font-size: 40px;
+    color: yellow;
 }
 
-.playerScore {
+/*.playerScore {
 	padding-right: 3px;
 }
 
 .computerScore {
 	padding-right: 4px;
-}
+}*/
 
 .playAreaDiv {
 	width: 100%;
@@ -217,4 +238,15 @@ section {
 
 .tileVerticalPlayAreaRight .tileSquareVerticalBottom{
 	height: 43%;
+}
+
+.winner{
+	font-size: 40px;
+	font-weight: 700;
+	font-family: 'Ravi Prakash', cursive;
+	color: yellow;
+}
+
+.activePlayer{
+	background-color: #296be4;
 }
