@@ -7,6 +7,7 @@ html {
 body {
 	height: 100%;
 	background-color: #40d040;
+	font-family: 'Ravi Prakash', cursive;
 }
 
 /*making sure the container for the entire game has the same height as the body*/
@@ -223,4 +224,8 @@ section {
 	height: 30px;
 	border-radius: 4px;
 	background-color: grey;
+}
+
+a{
+	font-size: 10px;
 }
