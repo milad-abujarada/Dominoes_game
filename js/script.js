@@ -1,9 +1,11 @@
-//creating session storages to represent the activePlayer, the round, and the scores of the player and the computer
+//////////////////////////////////////////////////setting up the initial game variables //////////////////////////////////////////
+
+/* creating local storage variables to represent the activePlayer, the last round winner, 
+and the scores of the player and the computer. The player always goes first in a new game. */
 localStorage.activePlayer = "player";
-localStorage.round = 1;
+localStorage.lastRoundWinner = '';
 localStorage.playerScore = 0;
 localStorage.computerScore = 0;
-localStorage.lastRoundWinner = '';
 
 // Tile object construction function used to create the game tiles
 function Tile(value1, value2){
@@ -16,11 +18,17 @@ or from the player side or the computer side to the playarea */
 var toBeMovedTile = new Tile();
 
 /* availableSides array to hold the sides values that represent the available options to play against, where index [0] represent 
-the open side of the left most tile and index [1] represent the open side of the right most tile
-availableSidesLocation corresponds to the location of each of those sides in the playarea */
+the open side of the left most tile and index [1] represent the open side of the right most tile.
+availableSidesLocation corresponds to the location of each of those sides in the playarea. */
 var availableSides = [];
 var availableSidesLocation = [];
 
+/* occupiedTileId used to refer to the occupied neighboring tile id.
+emptyTileId used to refer to the tile empty tile where the to be played tile will be placed.
+clickedOrEmptyTileLocation is used by the player and the computer to specifiy the location of the empty tile, this used to guaranty
+the correct placement of the to be played tile.
+occupiedLocation specify the location of the occupied tile relatively to the empty tile, also used to guaranty the correct placement
+of the to be played tile. */
 var occupiedTileId, emptyTileId, clickedOrEmptyTileLocation, occupiedLocation;
 
 /* Initializing four arrays one to hold all the tiles before shuffling
@@ -34,15 +42,25 @@ in order to be use in getting the right image from the images folder */
 var numberToString = ["zero", "one", "two", "three", "four", "five","six"];
 var numberToStringHorizontal = ["zero", "one", "two", "three", "four", "five","horizontalSix"];
 
+////////////////////////////////////////////End of setting up the initial game variables ////////////////////////////////////////
+
 
 $(document).ready(function(){
 
+///////////////////////////////////////////gets executed the first time the page loads ///////////////////////////////////////
+	
 	startGame();
 
 	setScore();
 	
-	setIntialActivePlayerBackground();
-	// attaching a delegated click event handler on the player tiles area
+	setInitialActivePlayerBackground();
+
+/////////////////////////////////////////End of gets executed the first time the page loads ///////////////////////////////////
+
+/////////////////////////////////////////////////gets executed based on an event//////////////////////////////////////////////
+
+	/* attaching a delegated click event handler on the player tiles area. 
+	the event triggers everytime the player clicks on one of his/her tiles. */
     $("#playerBoard").on( "click", ".tileVertical", function(event){ 
 
     	if(localStorage.activePlayer === "player"){
@@ -57,7 +75,8 @@ $(document).ready(function(){
 	    	the tile in the playerTiles array */
 			let tempTile = new Tile(parseInt($(this).attr("id").charAt(0)), parseInt($(this).attr("id").charAt(1)));
 
-			// locating the clicked tile in the playerTiles array and prepearing it to be played 
+			/* locating the clicked tile in the playerTiles array and prepearing it to be played.
+			it only gets moved if one of its sides matches the occupied neighboring tile. */
 	    	toBeMovedTile =  playerTiles[findTile(tempTile, playerTiles)];
 	    }
 	});
@@ -66,7 +85,7 @@ $(document).ready(function(){
     $("#playBoard").on( "click", ".emptyTile", function(event){ 
 
 		/* checking if the player highlighted a tile to be moved or not
-    	in case no highlighted tile then nothing happens*/
+    	in case no highlighted tile then nothing happens. */
     	if($(".highlight").length && (localStorage.activePlayer === "player")){
 
     		//determining the clicked empty tile location and its occupied neighboring tile id if one is occupied
@@ -83,7 +102,8 @@ $(document).ready(function(){
 	    		let index = occupiedTileIndex(occupiedTileId, availableSidesLocation, emptyTileId);
 	    		let matchingSides = checkForMatch(index, toBeMovedTile, availableSides);
 
-	    		// if there are matching sides then we continue
+	    		/* if there are matching sides between the player to be played selected tile
+	    		and the neighboring ocupied tile of the clicked empty tile, then we continue. */
 	    		if(typeof matchingSides != "undefined"){
 
 	    			//geting the value of the not matching side of the clicked to be played tile
@@ -138,6 +158,9 @@ $(document).ready(function(){
 		};
 	});
 
+///////////////////////////////////////////End of gets executed based on an event//////////////////////////////////////////////
+
+//////////////////////////////////////////functions used by the player and the computer////////////////////////////////////////
 	function startGame(){
 		availableSides = [];
 		availableSidesLocation = [];
@@ -149,8 +172,6 @@ $(document).ready(function(){
 		emptyTileId = undefined; 
 		clickedOrEmptyTileLocation = undefined; 
 		occupiedLocation = undefined;
-		//making sure script.js is linked correctly
-		console.log("DOM is ready");
 
 		//creating the 28 tiles of the game
 		allTiles = createAllTiles();
@@ -181,7 +202,8 @@ $(document).ready(function(){
 
 		//placing the boneyard tiles on the page
 		drawBoneyardTiles(boneyardTiles);
-	}
+	};
+
 	/* create a tile using Tile constructor function 
 	the arguments are the values on a tile's sides and the return is a single tile object*/
 	function createTile(value1, value2){
@@ -295,37 +317,6 @@ $(document).ready(function(){
 		areaArray.splice(findTile(aTile, areaArray), 1);
 	};
 
-	/* function to create a tile and place it in the computer area
-	the function takes in a tile from the computerTiles array as an argument */
-	function drawComputerTile(aTile){
-		$("<div></div>").addClass("tileVertical faceDown").attr("id", String(aTile.value1) + String(aTile.value2)).appendTo("#computerBoard");	
-	};
-
-	//function to draw tiles in the computer area takes in the array of computerTiles as an argument
-	function drawComputerTiles(computerTiles){
-		for(let i = 0; i < computerTiles.length; i++){
-			drawComputerTile(computerTiles[i]);
-		};
-	};
-
-	/* function to create both sides of a tile and places it in the player
-	the function takes in a tile from the playerTiles array and numberToString array as an arguments */
-	function drawPlayerTile(aTile, numberToString){
-		let upperPart = $("<div></div>").addClass("tileSquareVerticalTop").css("backgroundImage", "url(images/" + numberToString[aTile.value1]+".png");
-		let bottomPart = $("<div></div>").addClass("tileSquareVerticalBottom").css("backgroundImage", "url(images/" + numberToString[aTile.value2]+".png");
-		let verticalTile = $("<div></div>").addClass("tileVertical").attr("id", String(aTile.value1) + String(aTile.value2));
-		upperPart.appendTo(verticalTile);
-		bottomPart.appendTo(verticalTile);
-		verticalTile.appendTo("#playerBoard");
-	};
-	
-	//function to draw tiles in the player area takes in the playerTiles and numberToString arrays as arguments
-	function drawPlayerTiles(playerTiles, numberToString){
-		for(let i = 0; i < playerTiles.length; i++){
-			drawPlayerTile(playerTiles[i], numberToString);
-		}
-	};
-
 	//function to create a tile and place it in the boneyard area
 	function drawBoneyardTile(aTile){
 		$("<div></div>").addClass("tileHorizontal faceDownBlock").attr("id", String(aTile.value1) + String(aTile.value2)).appendTo("#boneyardTiles");	
@@ -355,10 +346,14 @@ $(document).ready(function(){
 		};
 	};
 
+	/* to restart a new game after either the computer or the player wins the current game
+	by getting 150 points or more*/
 	function newGame(){
 		location.reload();
 	};
 
+	/* to play a new round when either the computer or the player wins the current round.
+	Also this function used to restart a round that ends in a deadlock. (no more moves) */
 	function newRound(){
 		removeTilesDrawing("playerBoard", "tileVertical");
 		removeTilesDrawing("computerBoard", "tileVertical");
@@ -375,6 +370,7 @@ $(document).ready(function(){
 		};
 	};
 
+	//to remove the drawing the played tiles
 	function removeTilesFromPlayArea(){
 		$(".tileSquareVerticalTop").remove();
 		$(".tileSquareVerticalBottom").remove();
@@ -382,16 +378,19 @@ $(document).ready(function(){
 		$(".tileSquareHorizontalLeft").remove();
 	};
 
+	// to remove the declaration of a winner
 	function removeWinnerDeclaration(){
 		$(".winner").remove();
 	}
 
+	// reseting the tiles in the play area so they are back into the emptyTile state
 	function resetTilesOfPlayArea(){
 		$(".tileHorizontal").addClass("emptyTile");
 		$(".tileVerticalPlayAreaRight").addClass("emptyTile");
 		$(".tileVerticalPlayAreaLeft").addClass("emptyTile");
 	};
 
+	//remove all the buttons(start new round, replay this round, start a new game) from the page.
 	function removeButtons(){
 		$("button").remove();
 	};
@@ -400,33 +399,6 @@ $(document).ready(function(){
 	function highlightTile(tileId){
 		$("#" + tileId).addClass("highlight");
 	};
-
-	//function to remove the highlighting of a tile
-	function removeHighlight(){
-		let previouslyClicked = $(".highlight");
-		if (previouslyClicked){
-			previouslyClicked.removeClass("highlight");
-		};
-	};
-
-	/* function to check if either of the clicked empty tile neighbors is occupied in order to check for a match later.
-	the function takes in the empty clicked tile as an argument and return the occupied tile id as a string if one exists */
-	function OccupiedNeighboringTile(emptyTile){
-		let emptyTileId, neighboringTile1, neighboringTile2;
-		emptyTileId = tileIdNumber(emptyTile);
-		emptyTileId ? neighboringTile1 = $("#tile" + String(emptyTileId - 1)) : neighboringTile1 = $("#tile27") ;
-		neighboringTile2 = $("#tile" + String((emptyTileId + 1) % 28));
-		if(!((neighboringTile1).hasClass("emptyTile"))){
-			return neighboringTile1.attr("id");
-		};
-		if(!((neighboringTile2).hasClass("emptyTile"))){
-			return neighboringTile2.attr("id");
-		};
-	};
-
-	/* function to check if either of the clicked empty tile neighbors is occupied in order to check for a match later.
-	the function takes in the empty clicked tile as an argument and return the occupied tile id as a string if one exists */
-	
 
 	/* function to check the empty tile location takes in the empty tile id as an argument 
 	and returns a string containing either upperRow, rightColumn, bottomRow, or leftColumn.
@@ -444,20 +416,6 @@ $(document).ready(function(){
 			return "leftColumn";
 		}
 	};
-
-	/* function takes in the occupiedTile string and the availableSidesLocations array as arrguments and return
-	the index of the occupiedTile in the array */
-	function occupiedTileIndex(occupiedTile, availableSidesLocation, emptyTileId){
-		if(availableSidesLocation[0] === availableSidesLocation[1]){
-			if(tileIdNumber(emptyTileId) === 2){
-				return 1;
-			}else{
-				return 0;
-			};
-		}else{
-		return $.inArray(occupiedTile, availableSidesLocation);
-		};
-	};  
 
 	/* function that takes in an index that refer to the occupied tile available side in the availableSides array,
 	also it takes in the toBeMovedTile as an argument to compare its sides to the availableSide[index] for a match.
@@ -521,34 +479,6 @@ $(document).ready(function(){
 		tiles.remove();
 	};
 
-	// function to draw the player's move after he/she chooses a tile and places it in the right place
-	function drawingPlayersMove(checkForAWin){
-		removeTile(toBeMovedTile, playerTiles);
-		eraseAndDrawPlayerTiles();
-		checkForAWin(playerTiles, computerTiles);
-		
-	};
-
-	/* function used to erase all the drawing of the tiles on the player side and redraw them.
-	this function used after the player makes a play */
-	function eraseAndDrawPlayerTiles(){
-		removeTilesDrawing("playerBoard", "tileVertical");
-		drawPlayerTiles(playerTiles, numberToString);
-	};
-
-	//
-	function drawingComputersMove(checkForAWin){
-		removeTile(toBeMovedTile, computerTiles);
-		eraseAndDrawComputerTiles();
-		checkForAWin(computerTiles, playerTiles);
-	};
-
-	//
-	function eraseAndDrawComputerTiles(){
-		removeTilesDrawing("computerBoard", "tileVertical");
-		drawComputerTiles(computerTiles);
-	};
-
 	/* function to change the values of the [1] index in storeAvailableSides and storeAvailableSidesLocation
 	arrays after a move was made */
 	function changingOnethAvailableSide(notMatchingSide, emptyTileId){
@@ -573,6 +503,237 @@ $(document).ready(function(){
 		localStorage.activePlayer === "player" ? localStorage.activePlayer = "computer" : localStorage.activePlayer = "player";
 	};
 
+	//to place a played tile in the upper row with the occupied tile on the left of it
+	function upperRowLeft(matchingSides, notMatchingSide){
+		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
+		changingOnethAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+	//to place a played tile in the upper row with the occupied tile on the right of it
+	function upperRowRight(notMatchingSide, matchingSides){
+		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+    //to place a played tile in the bottom row with the occupied tile on the left of it
+	function bottomRowLeft(matchingSides, notMatchingSide){
+		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+    //to place a played tile in the bottom row with the occupied tile on the right of it
+	function bottomRowRight(notMatchingSide, matchingSides){
+		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
+		changingOnethAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+    //to place a played tile in the left column with the occupied tile located above it
+	function leftColumnTop(matchingSides, notMatchingSide){
+		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+    //to place a played tile in the left column with the occupied tile located below it
+	function leftColumnBottom(notMatchingSide, matchingSides){
+		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+    //to place a played tile in the right column with the occupied tile located above it
+	function rightColumnTop(matchingSides, notMatchingSide){
+		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
+		changingOnethAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+    //to place a played tile in the right column with the occupied tile located below it
+	function rightColumnBottom(notMatchingSide, matchingSides){
+		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
+		changingZerothAvailableSide(notMatchingSide, emptyTileId);
+	};
+
+	// to play a tile and place it in the play area
+	function playTile(matchingSides, notMatchingSide){
+		if(clickedOrEmptyTileLocation === "upperRow"){
+			occupiedLocation === "left" ? upperRowLeft(matchingSides, notMatchingSide) : upperRowRight(notMatchingSide, matchingSides);	
+		}else if(clickedOrEmptyTileLocation === "bottomRow"){
+			occupiedLocation === "left" ? bottomRowLeft(matchingSides, notMatchingSide) : bottomRowRight(notMatchingSide, matchingSides);
+		}else if(clickedOrEmptyTileLocation === "leftColumn"){
+			occupiedLocation === "top" ? leftColumnTop(matchingSides, notMatchingSide) : leftColumnBottom(notMatchingSide, matchingSides);
+		}else if(clickedOrEmptyTileLocation === "rightColumn"){
+			occupiedLocation === "top" ? rightColumnTop(matchingSides, notMatchingSide) : rightColumnBottom(notMatchingSide, matchingSides);
+		};
+	};
+
+	// to draw the boneyard tiles after a tile withdraw
+	function tileWithdrawDrawing(){
+		//removing the withdrawn tile from the boneyardTiles array
+		removeTile(toBeMovedTile, boneyardTiles);
+
+		//erasing the drawing of the boneyard tiles from the page
+		removeTilesDrawing("boneyardTiles", "faceDownBlock");
+
+		//redrawing the boneyardTiles after removing the withdrawn tile
+		drawBoneyardTiles(boneyardTiles);
+	};
+
+	// to check for a win after the active player makes a move by checking the tiles array length
+	function checkForAWin(activePlayerTiles, notActivePlayerTiles){
+		if(!activePlayerTiles.length){
+			calculatePoints(notActivePlayerTiles);	
+			localStorage.lastRoundWinner = localStorage.activePlayer;
+			localStorage.activePlayer = "";
+			drawWinner();
+		};
+	};
+
+	// to draw the wining statement on the winner side
+	function drawWinner(){
+		if(localStorage.lastRoundWinner === "player"){
+			if(parseInt(localStorage.playerScore) < 150){
+				$("#playerBoard").append("<div class=\"winner\">Ladies and Gentelmen this round's WINNER :)</div>");
+				drawButton("#playerBoard", "winner");
+			}else{
+				$("#playerBoard").append("<div class=\"winner\">YOU SHALL BE VICTORIOUS:)</div>");
+				drawButton("#playerBoard", "winner");
+			};
+		}else{
+			if(parseInt(localStorage.computerScore) < 150){
+				$("#computerBoard").append("<div class=\"winner\">The BITS got ya this round :)</div>");
+				drawButton("#computerBoard", "winner");
+			}else{
+				$("#computerBoard").append("<div class=\"winner\">YOU WERE DEVOURED BY THE BITS :)</div>");
+				drawButton("#computerBoard", "winner");
+			};
+		};
+	};
+
+	// to draw a button on a specific side based on the situation that initiated the draw
+	function drawButton(buttonLocation, text){
+		if(text){
+			if((parseInt(localStorage.playerScore) < 150) && (parseInt(localStorage.computerScore) < 150)){
+				$("<button class=\"nextRound\" type=\"button\">Start next round</button>").click(function(){newRound()}).appendTo($(buttonLocation));
+			}else{
+				$("<button class=\"newGame\" type=\"button\">Start new game</button>").click(function(){newGame()}).appendTo($(buttonLocation));
+			};
+		}else{
+			$("<button class=\"nextRound\" type=\"button\">Replay this round</button>").click(function(){
+				if(localStorage.lastRoundWinner){
+					newRound();
+				}else{
+					newRound();
+					localStorage.activePlayer = "player";
+				};
+			}).appendTo($(buttonLocation));
+		};
+		
+	};
+
+	// sets the score after a round is over
+	function setScore(){
+		$("#computerScore").text(localStorage.computerScore);
+		$("#playerScore").text(localStorage.playerScore);
+	};
+
+	// to set the initial score when a new game starts
+	function setInitialActivePlayerBackground(){
+		$("."+localStorage.activePlayer+"Score").toggleClass("activePlayer");
+	};
+
+	// changing the background of the player or the computer score area to reflect the active player
+	function backgroundForActivePlayer(){
+		if(localStorage.activePlayer === "player"){
+			$(".playerScore").addClass("activePlayer");
+			$(".computerScore").removeClass("activePlayer");
+		}else{
+			$(".playerScore").removeClass("activePlayer");
+			$(".computerScore").addClass("activePlayer");
+		};
+	};
+
+	// calculates the winner points
+	function calculatePoints(loserTiles){
+		let points = 0;
+		for(let i = 0; i < loserTiles.length; i++) {
+			if((loserTiles[i].value1 === 0) && (loserTiles[i].value2 === 0)){
+				points += 25;
+			};
+			points += (loserTiles[i].value1 + loserTiles[i].value2);
+		};
+		if(localStorage.activePlayer === "player"){
+			localStorage.playerScore = parseInt(localStorage.playerScore) + points;
+		}else{
+			localStorage.computerScore = parseInt(localStorage.computerScore) + points;
+		};
+		setScore();
+	};
+
+	// it allows the user to differ his/her turn in case no play to be made and no more tiles to widthraw
+	function drawKnockButton(){
+		$("<button class=\"knockTurn\" type=\"button\">Knock Your Turn</button>").click(function(){
+			changeActivePlayer();
+			backgroundForActivePlayer();
+			removeButtons();
+			setTimeout(function(){computerTurn();}, 2000);
+			}).appendTo($("#playerSide"));
+		if(!moreMoves()){
+			drawButton("#playerSide");
+		};
+	};
+
+	/* function used after no more tiles to be withdrawn to check if both sides don't have any more plays to make,
+	then it draws a button that will allow the round to be replayed if a deadlock occurs*/
+	function moreMoves(){
+		let sides = [];
+		let i;
+		for(i = 0; i < playerTiles.length; i++){
+			sides.push(playerTiles[i].value1);
+			sides.push(playerTiles[i].value2);
+		};
+		for(i = 0; i < computerTiles.length; i++){
+			sides.push(computerTiles[i].value1);
+			sides.push(computerTiles[i].value2);
+		};
+		for(i = 0; i < sides.length; i++){
+			if($.inArray(sides[i], availableSides) !== -1){
+				return true;
+			}
+		}
+	};
+
+//////////////////////////////////////End of functions used by the player and the computer/////////////////////////////////////
+
+//////////////////////////////////////////////functions used by the computer//////////////////////////////////////////////////
+
+	/* function to create a tile and place it in the computer area
+	the function takes in a tile from the computerTiles array as an argument */
+	function drawComputerTile(aTile){
+		$("<div></div>").addClass("tileVertical faceDown").attr("id", String(aTile.value1) + String(aTile.value2)).appendTo("#computerBoard");	
+	};
+
+	//function to draw tiles in the computer area takes in the array of computerTiles as an argument
+	function drawComputerTiles(computerTiles){
+		for(let i = 0; i < computerTiles.length; i++){
+			drawComputerTile(computerTiles[i]);
+		};
+	};
+
+	//to draw the computer play and redraw the computer tiles 
+	function drawingComputersMove(checkForAWin){
+		removeTile(toBeMovedTile, computerTiles);
+		eraseAndDrawComputerTiles();
+		checkForAWin(computerTiles, playerTiles);
+	};
+
+	//remove the tiles before the play and redraw the tiles after the move was made
+	function eraseAndDrawComputerTiles(){
+		removeTilesDrawing("computerBoard", "tileVertical");
+		drawComputerTiles(computerTiles);
+	};
+
+	/* function that kicks off the computer turn by calling computer functionallity function checks for a matching sides
+	between the available sided and the computer tiles, then if a match is found the matched tile gets placed in the play area.
+	if a match is not found it withdraw a tile and then calles itself. if no more tiles to withdraw and no play to be made, it knocks 
+	its turn. */
 	function computerTurn(){
 		if(localStorage.activePlayer === "computer"){
 			let matchingSides = computerFunctionality(computerTiles, availableSides);
@@ -612,7 +773,8 @@ $(document).ready(function(){
 
 	/* function to find a match for the computer turn to play. The function places the matched tile in toBeMovedTile
 	variable and returns the matched side. the function also calls on the highlightTile function to highlight the 
-	toBeMoved Tile and gets the occupiedTileId */
+	toBeMoved Tile and gets the occupiedTileId 
+	Note: in the future the improvement for the computer way of looking for a good move and a match should be in that function. */
 	function computerFunctionality(computerTiles, availableSides){
 		let matchingSide, computerTilesindex = 0;
 		while((!matchingSide) && (computerTilesindex !== computerTiles.length)){
@@ -654,196 +816,86 @@ $(document).ready(function(){
 		};	
 	};
 
-
-	function upperRowLeft(matchingSides, notMatchingSide){
-		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
-		changingOnethAvailableSide(notMatchingSide, emptyTileId);
-	};
-
-
-	function upperRowRight(notMatchingSide, matchingSides){
-		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
-		changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	};
-
-
-	function bottomRowLeft(matchingSides, notMatchingSide){
-		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToStringHorizontal);
-		changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	};
-
-
-	function bottomRowRight(notMatchingSide, matchingSides){
-		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToStringHorizontal);
-		changingOnethAvailableSide(notMatchingSide, emptyTileId);
-	};
-
-
-	function leftColumnTop(matchingSides, notMatchingSide){
-		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
-		changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	};
-
-	function leftColumnBottom(notMatchingSide, matchingSides){
-		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
-		changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	};
-
-
-	function rightColumnTop(matchingSides, notMatchingSide){
-		drawPlayAreaTile(matchingSides, notMatchingSide, emptyTileId, numberToString);
-		changingOnethAvailableSide(notMatchingSide, emptyTileId);
-	};
-
-
-	function rightColumnBottom(notMatchingSide, matchingSides){
-		drawPlayAreaTile(notMatchingSide, matchingSides, emptyTileId, numberToString);
-		changingZerothAvailableSide(notMatchingSide, emptyTileId);
-	};
-
-
-	function playTile(matchingSides, notMatchingSide){
-		if(clickedOrEmptyTileLocation === "upperRow"){
-			occupiedLocation === "left" ? upperRowLeft(matchingSides, notMatchingSide) : upperRowRight(notMatchingSide, matchingSides);	
-		}else if(clickedOrEmptyTileLocation === "bottomRow"){
-			occupiedLocation === "left" ? bottomRowLeft(matchingSides, notMatchingSide) : bottomRowRight(notMatchingSide, matchingSides);
-		}else if(clickedOrEmptyTileLocation === "leftColumn"){
-			occupiedLocation === "top" ? leftColumnTop(matchingSides, notMatchingSide) : leftColumnBottom(notMatchingSide, matchingSides);
-		}else if(clickedOrEmptyTileLocation === "rightColumn"){
-			occupiedLocation === "top" ? rightColumnTop(matchingSides, notMatchingSide) : rightColumnBottom(notMatchingSide, matchingSides);
-		};
-	};
-
-
-	function tileWithdrawDrawing(){
-		//removing the withdrawn tile from the boneyardTiles array
-		removeTile(toBeMovedTile, boneyardTiles);
-
-		//erasing the drawing of the boneyard tiles from the page
-		removeTilesDrawing("boneyardTiles", "faceDownBlock");
-
-		//redrawing the boneyardTiles after removing the withdrawn tile
-		drawBoneyardTiles(boneyardTiles);
-
-	};
-
-
-	function checkForAWin(activePlayerTiles, notActivePlayerTiles){
-		if(!activePlayerTiles.length){
-			calculatePoints(notActivePlayerTiles);	
-			localStorage.lastRoundWinner = localStorage.activePlayer;
-			localStorage.activePlayer = "";
-			drawWinner();
-		};
-	};
-
-	function drawWinner(){
-		if(localStorage.lastRoundWinner === "player"){
-			if(parseInt(localStorage.playerScore) < 150){
-				$("#playerBoard").append("<div class=\"winner\">Ladies and Gentelmen this round's WINNER :)</div>");
-				drawButton("#playerBoard", "winner");
-			}else{
-				$("#playerBoard").append("<div class=\"winner\">YOU SHALL BE VICTORIOUS:)</div>");
-				drawButton("#playerBoard", "winner");
-			};
-		}else{
-			if(parseInt(localStorage.computerScore) < 150){
-				$("#computerBoard").append("<div class=\"winner\">The BITS got ya this round :)</div>");
-				drawButton("#computerBoard", "winner");
-			}else{
-				$("#computerBoard").append("<div class=\"winner\">YOU WERE DEVOURED BY THE BITS :)</div>");
-				drawButton("#computerBoard", "winner");
-			};
-		};
-	};
-
-	function drawButton(buttonLocation, text){
-		if(text){
-			if((parseInt(localStorage.playerScore) < 150) && (parseInt(localStorage.computerScore) < 150)){
-				$("<button class=\"nextRound\" type=\"button\">Start next round</button>").click(function(){newRound()}).appendTo($(buttonLocation));
-			}else{
-				$("<button class=\"newGame\" type=\"button\">Start new game</button>").click(function(){newGame()}).appendTo($(buttonLocation));
-			};
-		}else{
-			$("<button class=\"nextRound\" type=\"button\">Replay this round</button>").click(function(){
-				if(localStorage.lastRoundWinner){
-					newRound();
-				}else{
-					newRound();
-					localStorage.activePlayer = "player";
-				};
-			}).appendTo($(buttonLocation));
-		};
-		
-	};
-
-	function setScore(){
-		$("#computerScore").text(localStorage.computerScore);
-		$("#playerScore").text(localStorage.playerScore);
-	};
-
-	function setIntialActivePlayerBackground(){
-		$("."+localStorage.activePlayer+"Score").toggleClass("activePlayer");
-	};
-
-	function backgroundForActivePlayer(){
-		if(localStorage.activePlayer === "player"){
-			$(".playerScore").addClass("activePlayer");
-			$(".computerScore").removeClass("activePlayer");
-		}else{
-			$(".playerScore").removeClass("activePlayer");
-			$(".computerScore").addClass("activePlayer");
-		};
-	};
-
-	function calculatePoints(loserTiles){
-		let points = 0;
-		for(let i = 0; i < loserTiles.length; i++) {
-			if((loserTiles[i].value1 === 0) && (loserTiles[i].value2 === 0)){
-				points += 25;
-			};
-			points += (loserTiles[i].value1 + loserTiles[i].value2);
-		};
-		if(localStorage.activePlayer === "player"){
-			localStorage.playerScore = parseInt(localStorage.playerScore) + points;
-		}else{
-			localStorage.computerScore = parseInt(localStorage.computerScore) + points;
-		};
-		setScore();
-	};
-
+	// the computer differ its turn when no more tiles to withdraw and no moves to be made with the current set of tiles and options
 	function computerKnockTurn(){
 		changeActivePlayer();
 		backgroundForActivePlayer();
 	};
 
-	function drawKnockButton(){
-		$("<button class=\"knockTurn\" type=\"button\">Knock Your Turn</button>").click(function(){
-			changeActivePlayer();
-			backgroundForActivePlayer();
-			removeButtons();
-			setTimeout(function(){computerTurn();}, 2000);
-			}).appendTo($("#playerSide"));
-		if(!moreMoves()){
-			drawButton("#playerSide");
+//////////////////////////////////////////////End of functions used by the computer//////////////////////////////////////////////
+
+//////////////////////////////////////////////////functions used by the player//////////////////////////////////////////////////
+
+	/* function to create both sides of a tile and places it in the player
+	the function takes in a tile from the playerTiles array and numberToString array as an arguments */
+	function drawPlayerTile(aTile, numberToString){
+		let upperPart = $("<div></div>").addClass("tileSquareVerticalTop").css("backgroundImage", "url(images/" + numberToString[aTile.value1]+".png");
+		let bottomPart = $("<div></div>").addClass("tileSquareVerticalBottom").css("backgroundImage", "url(images/" + numberToString[aTile.value2]+".png");
+		let verticalTile = $("<div></div>").addClass("tileVertical").attr("id", String(aTile.value1) + String(aTile.value2));
+		upperPart.appendTo(verticalTile);
+		bottomPart.appendTo(verticalTile);
+		verticalTile.appendTo("#playerBoard");
+	};
+	
+	//function to draw tiles in the player area takes in the playerTiles and numberToString arrays as arguments
+	function drawPlayerTiles(playerTiles, numberToString){
+		for(let i = 0; i < playerTiles.length; i++){
+			drawPlayerTile(playerTiles[i], numberToString);
+		}
+	};
+
+	//function to remove the highlighting of a tile
+	function removeHighlight(){
+		let previouslyClicked = $(".highlight");
+		if (previouslyClicked){
+			previouslyClicked.removeClass("highlight");
 		};
 	};
 
-	function moreMoves(){
-		let sides = [];
-		let i;
-		for(i = 0; i < playerTiles.length; i++){
-			sides.push(playerTiles[i].value1);
-			sides.push(playerTiles[i].value2);
+	/* function to check if either of the clicked empty tile neighbors is occupied in order to check for a match later.
+	the function takes in the empty clicked tile as an argument and return the occupied tile id as a string if one exists */
+	function OccupiedNeighboringTile(emptyTile){
+		let emptyTileId, neighboringTile1, neighboringTile2;
+		emptyTileId = tileIdNumber(emptyTile);
+		emptyTileId ? neighboringTile1 = $("#tile" + String(emptyTileId - 1)) : neighboringTile1 = $("#tile27") ;
+		neighboringTile2 = $("#tile" + String((emptyTileId + 1) % 28));
+		if(!((neighboringTile1).hasClass("emptyTile"))){
+			return neighboringTile1.attr("id");
 		};
-		for(i = 0; i < computerTiles.length; i++){
-			sides.push(computerTiles[i].value1);
-			sides.push(computerTiles[i].value2);
+		if(!((neighboringTile2).hasClass("emptyTile"))){
+			return neighboringTile2.attr("id");
 		};
-		for(i = 0; i < sides.length; i++){
-			if($.inArray(sides[i], availableSides) !== -1){
-				return true;
-			}
-		}
 	};
+
+	/* function takes in the occupiedTile string and the availableSidesLocations array as arrguments and return
+	the index of the occupiedTile in the array */
+	function occupiedTileIndex(occupiedTile, availableSidesLocation, emptyTileId){
+		if(availableSidesLocation[0] === availableSidesLocation[1]){
+			if(tileIdNumber(emptyTileId) === 2){
+				return 1;
+			}else{
+				return 0;
+			};
+		}else{
+		return $.inArray(occupiedTile, availableSidesLocation);
+		};
+	}; 
+
+	// function to draw the player's move after he/she chooses a tile and places it in the right place
+	function drawingPlayersMove(checkForAWin){
+		removeTile(toBeMovedTile, playerTiles);
+		eraseAndDrawPlayerTiles();
+		checkForAWin(playerTiles, computerTiles);
+		
+	};
+
+	/* function used to erase all the drawing of the tiles on the player side and redraw them.
+	this function used after the player makes a play */
+	function eraseAndDrawPlayerTiles(){
+		removeTilesDrawing("playerBoard", "tileVertical");
+		drawPlayerTiles(playerTiles, numberToString);
+	};
+
+/////////////////////////////////////////////End of functions used by the player////////////////////////////////////////////////
+
 });

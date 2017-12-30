@@ -1,9 +1,6 @@
-
-
 /*making sure the html has enough height to contain everything else and based the percentage on that*/
 html {
 	height: 600px;
-    /*border: 2px solid black;*/
 }
 
 /*making sure the body has the same height as the html document*/
@@ -22,7 +19,6 @@ section {
 	display:inline-block;
 	height: 20%;
 	width: 90%;
-	/*border:2px solid black;*/
 	text-align: center;
 }
 
@@ -52,14 +48,11 @@ section {
 .tileSquareVerticalTop {
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
-	/*background-image: url('../images/one.png');*/
-	
 }
 
 .tileSquareVerticalBottom {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
-	/*background-image: url('../images/six.png');*/
 }
 
 .tileSquareVerticalTop,
@@ -86,14 +79,12 @@ section {
 .tileSquareHorizontalRight {
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
-	/*background-image: url('../images/horizontalSix.png');*/
 }
 
 .tileSquareHorizontalLeft {
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
 	width: 45%;
-	/*background-image: url('../images/three.png');*/
 }
 
 .faceDown,
@@ -124,11 +115,6 @@ section {
 	border-color: #f4f5f5;
 }
 
-.computerArea{
-/*	position: relative;
-	bottom: 1%;*/
-}
-
 .playArea {
     position: relative;
     bottom: 55%;
@@ -144,7 +130,6 @@ section {
     height: 15%;
     position: relative;
     left: 5%;
-   /* border:1px solid green;*/
 }
 
 .playAreaCenter{
@@ -152,8 +137,6 @@ section {
     height: 55%;
     position: relative;
     left: 5%;
-    /*text-align: center;*/
-    /*border:1px solid brown;*/
 }
 
 .playAreaRightColumn,
@@ -161,7 +144,6 @@ section {
 	width: 5%;
 	height: 100%;
 	display: inline-block;
-	/*border:1px solid aqua;*/
 }
 
 .playAreaRightColumn{
@@ -170,14 +152,6 @@ section {
 
 .playerScore,
 .computerScore {
-/*	width: 43%;
-	height: 95%;
-	position: relative;
-    bottom: 2%;
-	display: inline-block;
-	border-radius: 5px;
-	border:1px solid grey;
-	box-sizing: border-box;*/
 	width: 43%;
     height: 95%;
     position: relative;
@@ -193,14 +167,6 @@ section {
     color: yellow;
 }
 
-/*.playerScore {
-	padding-right: 3px;
-}
-
-.computerScore {
-	padding-right: 4px;
-}*/
-
 .playAreaDiv {
 	width: 100%;
 	height: 100%;
@@ -212,7 +178,6 @@ section {
 	position: relative;
 	height: 98%;
 	width: 9%;
-	/*left: 10%;*/
 	bottom: 21%;
 }
 
@@ -225,7 +190,6 @@ section {
     position: relative;
     bottom: 54%;
     height: 20%;
-
 }
 
 .highlight{
