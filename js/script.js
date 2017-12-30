@@ -365,6 +365,7 @@ $(document).ready(function(){
 		removeWinnerDeclaration();
 		startGame();
 		localStorage.activePlayer = localStorage.lastRoundWinner;
+		backgroundForActivePlayer();
 		if(localStorage.activePlayer === "computer"){
 			computerTurn();
 		};
@@ -593,7 +594,7 @@ $(document).ready(function(){
 				$("#playerBoard").append("<div class=\"winner\">Ladies and Gentelmen this round's WINNER :)</div>");
 				drawButton("#playerBoard", "winner");
 			}else{
-				$("#playerBoard").append("<div class=\"winner\">YOU SHALL BE VICTORIOUS:)</div>");
+				$("#playerBoard").append("<div class=\"winner\">YOU SHALL BE VICTORIOUS :)</div>");
 				drawButton("#playerBoard", "winner");
 			};
 		}else{
@@ -622,6 +623,7 @@ $(document).ready(function(){
 				}else{
 					newRound();
 					localStorage.activePlayer = "player";
+					backgroundForActivePlayer();
 				};
 			}).appendTo($(buttonLocation));
 		};
