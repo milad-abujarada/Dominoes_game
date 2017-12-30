@@ -8,6 +8,7 @@ body {
 	height: 100%;
 	background-color: #40d040;
 	font-family: 'Ravi Prakash', cursive;
+	color: yellow;
 }
 
 /*making sure the container for the entire game has the same height as the body*/
@@ -229,4 +230,9 @@ section {
 a{
 	font-size: 12px;
 	text-decoration: none;
+}
+
+p{
+	text-align: justify;
+	font-size: 18px;
 }
