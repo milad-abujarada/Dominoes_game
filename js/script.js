@@ -40,9 +40,8 @@ $(document).ready(function(){
 	startGame();
 
 	setScore();
-
+	
 	setIntialActivePlayerBackground();
-
 	// attaching a delegated click event handler on the player tiles area
     $("#playerBoard").on( "click", ".tileVertical", function(event){ 
 
@@ -97,19 +96,16 @@ $(document).ready(function(){
 	    			drawn on the page in the clicked empty tile, the values in the availableSides and availableSidesLocations 
 	    			arrays of the corresponding new open side gets changed, then lastly the player area gets redrawn with
 	    			the new set of tiles after the played tile is removed then the active player is changed */ 
+	    			removeButtons();
 	    			playTile(matchingSides, notMatchingSide);	
 	    			drawingPlayersMove(checkForAWin);
 	    			if(localStorage.activePlayer){
 	    				setTimeout(function(){
+	    					changeActivePlayer();
 	    					backgroundForActivePlayer();
-		    				changeActivePlayer();
-		    				setTimeout(function(){
-		    					computerTurn();
-		    				},1250);
-		    			}, 1250);
-	    			}else {
-	    				calculatePoints(computerTiles);
-	    			}	
+		    				setTimeout(function(){computerTurn();},1000);
+		    			}, 1000);
+	    			};
 	    		};	 
 		    }; 
     	};	
@@ -136,6 +132,9 @@ $(document).ready(function(){
 
 			//erasing the player's tiles drawing from the page then redrawing the tiles with the withdrawn tile included
 			eraseAndDrawPlayerTiles();
+			if(!boneyardTiles.length){
+				drawKnockButton();
+			};
 		};
 	});
 
@@ -364,26 +363,37 @@ $(document).ready(function(){
 		removeTilesDrawing("playerBoard", "tileVertical");
 		removeTilesDrawing("computerBoard", "tileVertical");
 		removeTilesDrawing("boneyardTiles", "faceDownBlock");
-		$(".tileSquareVerticalTop").remove();
-		$(".tileSquareVerticalBottom").remove();
-		$(".tileSquareHorizontalRight").remove();
-		$(".tileSquareHorizontalLeft").remove();
-		$(".tileHorizontal").addClass("emptyTile");
-		$(".tileVerticalPlayAreaRight").addClass("emptyTile");
-		$(".tileVerticalPlayAreaLeft").addClass("emptyTile");
-		$("button").remove();
-		$(".winner").remove();
+		removeTilesFromPlayArea();
+		resetTilesOfPlayArea();
+		resetTilesOfPlayArea();
+		removeButtons();
+		removeWinnerDeclaration();
 		startGame();
 		localStorage.activePlayer = localStorage.lastRoundWinner;
 		if(localStorage.activePlayer === "computer"){
 			computerTurn();
 		};
-		console.log("boneyardTiles", boneyardTiles);
-		console.log("playerTiles", playerTiles);
-		console.log("computerTile", computerTiles);
-		console.log("toBeMovedTile", toBeMovedTile);
-		console.log("availableSides", availableSides);
-		console.log("availableSidesLocation", availableSidesLocation);
+	};
+
+	function removeTilesFromPlayArea(){
+		$(".tileSquareVerticalTop").remove();
+		$(".tileSquareVerticalBottom").remove();
+		$(".tileSquareHorizontalRight").remove();
+		$(".tileSquareHorizontalLeft").remove();
+	};
+
+	function removeWinnerDeclaration(){
+		$(".winner").remove();
+	}
+
+	function resetTilesOfPlayArea(){
+		$(".tileHorizontal").addClass("emptyTile");
+		$(".tileVerticalPlayAreaRight").addClass("emptyTile");
+		$(".tileVerticalPlayAreaLeft").addClass("emptyTile");
+	};
+
+	function removeButtons(){
+		$("button").remove();
 	};
 
 	//function to highlight a tile, it takes in the id of the tile to be highlighted as an argument
@@ -515,7 +525,7 @@ $(document).ready(function(){
 	function drawingPlayersMove(checkForAWin){
 		removeTile(toBeMovedTile, playerTiles);
 		eraseAndDrawPlayerTiles();
-		checkForAWin(playerTiles);
+		checkForAWin(playerTiles, computerTiles);
 		
 	};
 
@@ -530,7 +540,7 @@ $(document).ready(function(){
 	function drawingComputersMove(checkForAWin){
 		removeTile(toBeMovedTile, computerTiles);
 		eraseAndDrawComputerTiles();
-		checkForAWin(computerTiles);
+		checkForAWin(computerTiles, playerTiles);
 	};
 
 	//
@@ -578,13 +588,11 @@ $(document).ready(function(){
 	    				changeActivePlayer(); 
 	    				setTimeout(function(){
 	    					backgroundForActivePlayer();
+	    					if(!boneyardTiles.length){drawKnockButton();};
 	    				}, 1000);	
-	    			}else{
-	    				calculatePoints(playerTiles);
 	    			};
 				}, 1000);
-
-			}else{
+			}else if(boneyardTiles.length){
 				toBeMovedTile =  boneyardTiles[0];
 
 				tileWithdrawDrawing();
@@ -594,11 +602,11 @@ $(document).ready(function(){
 
 				//erasing the player's tiles drawing from the page then redrawing the tiles with the withdrawn tile included
 				eraseAndDrawComputerTiles();
-				setTimeout(function(){
-					computerTurn();
-				},1000);
-				
-			};	
+				setTimeout(function(){computerTurn();},1000);	
+			}else{
+				computerKnockTurn();
+				drawKnockButton();
+			}	
 		};
 	};
 
@@ -720,8 +728,9 @@ $(document).ready(function(){
 	};
 
 
-	function checkForAWin(activePlayerTiles){
+	function checkForAWin(activePlayerTiles, notActivePlayerTiles){
 		if(!activePlayerTiles.length){
+			calculatePoints(notActivePlayerTiles);	
 			localStorage.lastRoundWinner = localStorage.activePlayer;
 			localStorage.activePlayer = "";
 			drawWinner();
@@ -730,14 +739,42 @@ $(document).ready(function(){
 
 	function drawWinner(){
 		if(localStorage.lastRoundWinner === "player"){
-			$("#playerBoard").append("<div class=\"winner\">Ladies and Gentelmen we have a WINNER :)</div>");
-			$("<button type=\"button\">start next round</button>").click(function(){
-				newRound()}).appendTo($("#playerBoard"));
+			if(parseInt(localStorage.playerScore) < 150){
+				$("#playerBoard").append("<div class=\"winner\">Ladies and Gentelmen this round's WINNER :)</div>");
+				drawButton("#playerBoard", "winner");
+			}else{
+				$("#playerBoard").append("<div class=\"winner\">YOU SHALL BE VICTORIOUS:)</div>");
+				drawButton("#playerBoard", "winner");
+			};
 		}else{
-			$("#computerBoard").append("<div class=\"winner\">The BITS have you now :)</div>");
-			$("<button type=\"button\">start next round</button>").click(function(){
-				newRound()}).appendTo($("#computerBoard"));
+			if(parseInt(localStorage.computerScore) < 150){
+				$("#computerBoard").append("<div class=\"winner\">The BITS got ya this round :)</div>");
+				drawButton("#computerBoard", "winner");
+			}else{
+				$("#computerBoard").append("<div class=\"winner\">YOU WERE DEVOURED BY THE BITS :)</div>");
+				drawButton("#computerBoard", "winner");
+			};
 		};
+	};
+
+	function drawButton(buttonLocation, text){
+		if(text){
+			if((parseInt(localStorage.playerScore) < 150) && (parseInt(localStorage.computerScore) < 150)){
+				$("<button class=\"nextRound\" type=\"button\">Start next round</button>").click(function(){newRound()}).appendTo($(buttonLocation));
+			}else{
+				$("<button class=\"newGame\" type=\"button\">Start new game</button>").click(function(){newGame()}).appendTo($(buttonLocation));
+			};
+		}else{
+			$("<button class=\"nextRound\" type=\"button\">Replay this round</button>").click(function(){
+				if(localStorage.lastRoundWinner){
+					newRound();
+				}else{
+					newRound();
+					localStorage.activePlayer = "player";
+				};
+			}).appendTo($(buttonLocation));
+		};
+		
 	};
 
 	function setScore(){
@@ -750,8 +787,13 @@ $(document).ready(function(){
 	};
 
 	function backgroundForActivePlayer(){
-		$(".playerScore").toggleClass("activePlayer");
-		$(".computerScore").toggleClass("activePlayer");
+		if(localStorage.activePlayer === "player"){
+			$(".playerScore").addClass("activePlayer");
+			$(".computerScore").removeClass("activePlayer");
+		}else{
+			$(".playerScore").removeClass("activePlayer");
+			$(".computerScore").addClass("activePlayer");
+		};
 	};
 
 	function calculatePoints(loserTiles){
@@ -762,7 +804,7 @@ $(document).ready(function(){
 			};
 			points += (loserTiles[i].value1 + loserTiles[i].value2);
 		};
-		if(localStorage.lastRoundWinner === "player"){
+		if(localStorage.activePlayer === "player"){
 			localStorage.playerScore = parseInt(localStorage.playerScore) + points;
 		}else{
 			localStorage.computerScore = parseInt(localStorage.computerScore) + points;
@@ -770,4 +812,38 @@ $(document).ready(function(){
 		setScore();
 	};
 
+	function computerKnockTurn(){
+		changeActivePlayer();
+		backgroundForActivePlayer();
+	};
+
+	function drawKnockButton(){
+		$("<button class=\"knockTurn\" type=\"button\">Knock Your Turn</button>").click(function(){
+			changeActivePlayer();
+			backgroundForActivePlayer();
+			removeButtons();
+			setTimeout(function(){computerTurn();}, 2000);
+			}).appendTo($("#playerSide"));
+		if(!moreMoves()){
+			drawButton("#playerSide");
+		};
+	};
+
+	function moreMoves(){
+		let sides = [];
+		let i;
+		for(i = 0; i < playerTiles.length; i++){
+			sides.push(playerTiles[i].value1);
+			sides.push(playerTiles[i].value2);
+		};
+		for(i = 0; i < computerTiles.length; i++){
+			sides.push(computerTiles[i].value1);
+			sides.push(computerTiles[i].value2);
+		};
+		for(i = 0; i < sides.length; i++){
+			if($.inArray(sides[i], availableSides) !== -1){
+				return true;
+			}
+		}
+	};
 });

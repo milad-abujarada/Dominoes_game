@@ -181,7 +181,7 @@ section {
 	width: 43%;
     height: 95%;
     position: relative;
-    bottom: 38%;
+    bottom: 33%;
     display: inline-block;
     border-radius: 5px;
     border: 1px solid grey;
@@ -249,4 +249,14 @@ section {
 
 .activePlayer{
 	background-color: #296be4;
+}
+
+.knockTurn,
+.nextRound,
+.newGame{
+	display: inline-block;
+	margin: 5px;
+	height: 30px;
+	border-radius: 4px;
+	background-color: grey;
 }
