@@ -6,9 +6,8 @@ html {
 /*making sure the body has the same height as the html document*/
 body {
 	height: 100%;
-	background-color: #40d040;
-	font-family: 'Ravi Prakash', cursive;
-	color: yellow;
+	background-color: #82A0B4;
+	font-family: 'Dosis', sans-serif;
 }
 
 /*making sure the container for the entire game has the same height as the body*/
@@ -33,7 +32,7 @@ section {
 .tileVertical {
 	height: 95px;
 	width: 45px;
-	border: 2px solid black;
+	border: 2px solid #3E606F;
 	display: inline-block;	
 	border-radius: 5px;
 	margin-right: 2px;
@@ -43,7 +42,7 @@ section {
 .tileHorizontal {
 	height: 35px;
 	width: 76px;
-	border: 2px solid black;
+	border: 2px solid #3E606F;
 	display: inline-block;
 }
 
@@ -60,7 +59,7 @@ section {
 .tileSquareVerticalTop,
 .tileSquareVerticalBottom {
 	height: 46%;
-	border:2px solid red;
+	border:2px solid #D0CECE;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-color: white;
@@ -71,7 +70,7 @@ section {
 	display: block;
 	height: 90%;
 	width: 44%;
-	border:2px solid red;
+	border:2px solid #D0CECE;
 	float: right;
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -91,7 +90,7 @@ section {
 
 .faceDown,
 .faceDownBlock {
-	background-color: #296be4;
+	background-color: #3E606F;
 }
 
 .faceDownBlock {
@@ -103,7 +102,7 @@ section {
 .tileVerticalPlayAreaLeft {
 	height: 75px;
 	width: 40px;
-	border: 2px solid black;
+	border: 2px solid #3E606F;
 	display: block;
 	border-radius: 5px;
 }
@@ -114,7 +113,7 @@ section {
 }
 
 .emptyTile {
-	border-color: #f4f5f5;
+	border-color: #DEE0D3;
 }
 
 .playArea {
@@ -157,16 +156,16 @@ section {
 	width: 43%;
     height: 95%;
     position: relative;
-    bottom: 33%;
+    bottom: 43%;
     display: inline-block;
     border-radius: 5px;
-    border: 1px solid grey;
+    border: 1px solid #3E606F;
     box-sizing: border-box;
     left: 5px;
     text-align: center;
-    font-family: 'Ravi Prakash', cursive;
+    font-family: 'Dosis', sans-serif;
     font-size: 40px;
-    color: yellow;
+    color: #181721;
 }
 
 .playAreaDiv {
@@ -195,7 +194,7 @@ section {
 }
 
 .highlight{
-	box-shadow: 3px 3px 5px red;
+	box-shadow: 3px 3px 5px #181721;
 }
 
 .tileVerticalPlayAreaLeft .tileSquareVerticalBottom{
@@ -209,12 +208,11 @@ section {
 .winner{
 	font-size: 40px;
 	font-weight: 700;
-	font-family: 'Ravi Prakash', cursive;
-	color: yellow;
+	font-family: 'Dosis', sans-serif;
 }
 
 .activePlayer{
-	background-color: #296be4;
+	background-color: #3E606F;
 }
 
 .knockTurn,
@@ -224,7 +222,8 @@ section {
 	margin: 5px;
 	height: 30px;
 	border-radius: 4px;
-	background-color: grey;
+	background-color: #3E606F;
+	border-color: #3E606F;
 }
 
 a{
