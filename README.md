@@ -1,6 +1,6 @@
 ### Dominoes_game
 This is a dominoes web browser game where you can play against the computer. The game was developed over a 3 weeks period and uses HTML, CSS, ES5 syntax and JQuery. the following is a link to the game, which is hosted using github pages.
-https://milad-abujarada.github.io/Dominoes_game/
+* https://milad-abujarada.github.io/Dominoes_game/
 ### Game logic
 The game layout and tiles are create using HTML and CSS where the dominoes are created using <div> tags, css and images to represent the values on tiles' sides. The computer functionality for now depends on finding the first match in the compter dominoes and playing it. Future goal is to improve the computer functionality by making each tile has a weight to improve the computer selection functionality. In addition, to improving the computer functionailty by getting rid of the tiles that can cause the user to gain more point, the plan is to make the computer try and map the player's moves in order to go for blocking moves.
 ### WireFrames
