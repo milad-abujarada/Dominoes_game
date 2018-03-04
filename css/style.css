@@ -235,3 +235,21 @@ p{
 	text-align: justify;
 	font-size: 18px;
 }
+
+.videoTutorial,
+.note,
+.playGame,
+.logo {
+	text-align: center;
+}
+
+img {
+	width: 25%;
+}
+.playGame {
+	text-decoration: none;
+}
+
+.dominoes {
+	font-size: 38px;
+}
