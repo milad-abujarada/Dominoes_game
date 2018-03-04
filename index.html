@@ -1,117 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Dominoes</title>
-  <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
+	<title>How To Play</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript" src="js/script.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
 </head>
-<body>
-	<div class="container">
-      <section  class="computerArea" id="computerSide"> <!-- the area for the computer tiles -->
-  	    <div id="computerBoard">	
-  	    </div>
-      </section>
+<body style="background-color: #82A0B4; font: Dosis">
+<h1>Starting the game:</h1>
+	<p>The game has 28 tiles that get shuffled and the player and the computer get assigned 7 tiles each.
+	The rest of the tiles get placed in the boneyard area.
+	A random tile gets selected from the boneyard area and placed as the initial tile.
+	The player also goes first when a new game is started. After the first round, the winner of the previous round starts first.</p>
 
-      <section class="playArea" id="playBoard"> <!-- the play area where the tiles in play gets placed -->
-  	    <div class="playAreaDiv" id="playedTiles">	
-          <div class="playAreaUpperRow">
-            <div class="tileHorizontal emptyTile" id="tile1">
-<!--               <div class="tileSquareHorizontalRight"></div>
-              <div class="tileSquareHorizontalLeft"></div> -->
-            </div>
-              
-            <div class="tileHorizontal emptyTile" id="tile2"></div>
+<h1>Playing the Game:</h1>
+	<p>The player with the current turn places a matching domino next to the first domino. For
+	example, if the first domino has five and three sides, the next player must play
+	a domino that has either a five or three on it. 
+	If the player doesn’t have a domino of matching value, they withdraw a domino from the
+ 	“boneyard” by clicking on a tile. They keep picking up dominoes from the “boneyard” until they get a playable
+	domino. If there is no playable domino then the player must “knock” or pass their turn onto the next player. To play you first need to select a matching domino by clicking on it, this should highlight it, then you click on the empty tile where you want the domino to be placed. If you need to withdraw a tile from the boneyard then click on a tile and it'll be added to your set of tiles.</p>
 
-            <div class="tileHorizontal emptyTile" id="tile3"></div>
 
-            <div class="tileHorizontal emptyTile" id="tile4"></div>
+<h1>Scoring:</h1>
+	<p>The winner of a round is the one that gets rid of all of its dominoes. The winner at the end of each hand scores points for all the remaining unplayed dominoes in the other player’s hands. The zero domino gets counted 25 points.</p>
 
-            <div class="tileHorizontal emptyTile" id="tile5"></div>
+<h1>Game Winner</h1>
+	<p>The first player to reach 150 points wins.</p>
 
-            <div class="tileHorizontal emptyTile" id="tile6"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile7"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile8"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile9"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile10"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile11"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile12"></div>
-  	      </div>
-
-          <div class="playAreaCenter">
-            <div class="playAreaLeftColumn">
-              <div class="tileVerticalPlayAreaLeft emptyTile" id="tile0">
-<!--                 <div class="tileSquareVerticalTop"></div>
-                <div class="tileSquareVerticalBottom"></div> -->
-              </div>
-              <div class="tileVerticalPlayAreaLeft emptyTile" id="tile27"></div>
-            </div>
-
-            <div class="playerScore">
-              <div>Player</div>
-              <div id="playerScore"></div>
-            </div>
-
-            <div class="computerScore">
-              <div>Computer</div>
-              <div id="computerScore"></div>
-            </div>
-
-            <div class="playAreaRightColumn">
-              <div class="tileVerticalPlayAreaRight emptyTile" id="tile13">
-<!--                 <div class="tileSquareVerticalTop"></div>
-                <div class="tileSquareVerticalBottom"></div> -->
-              </div>
-              <div class="tileVerticalPlayAreaRight emptyTile" id="tile14"></div>
-            </div>
-            
-          </div>
-
-          <div class="playAreaBottomRow">
-            <div class="tileHorizontal emptyTile" id="tile26">
-<!--               <div class=tileSquareHorizontalRight></div>
-              <div class=tileSquareHorizontalLeft></div> -->
-            </div>
-            <div class="tileHorizontal emptyTile" id="tile25"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile24"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile23"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile22"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile21"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile20"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile19"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile18"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile17"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile16"></div>
-
-            <div class="tileHorizontal emptyTile" id="tile15"></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="boneyardArea" id="boneyard"> <!-- tiles not withdrawn yet -->
-  	    <div class="boneyarAreaDiv" id="boneyardTiles"></div>
-      </section>
-
-      <section class="playerArea" id="playerSide"> <!-- tiles not withdrawn yet -->
-  	    <div id="playerBoard"></div>
-        <a href="how_to_play.html" target="_blank" >How to play</a>
-      </section>
-    </div>
+<h1>Video tutorial</h1>
+<iframe width="640" height="360" src="https://www.youtube.com/embed/iMjPeOXS9_U" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </body>
 </html>
