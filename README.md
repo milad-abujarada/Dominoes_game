@@ -6,6 +6,6 @@ The game layout and tiles are create using HTML and CSS where the dominoes are c
 ### WireFrames
 Using mockflow.com wireframe I created a basic layout for the game.
 * https://wireframepro.mockflow.com/view/Dcd849812909994e6474ab446df91f488#/page/788de7c8ab5643bab0cbff4fef529daa/sidebar/off 
-### Trello_Page
+### Trello board
 In the development process I used agile methodology to keep the tasks of building the game organized. The following link to the trello board shows the task completed.
 * https://trello.com/b/64t5q6gp/browser-game
